@@ -4,6 +4,8 @@
   "description": "bugKira - The Bug Tracker",
   "main": "./server/index.js",
   "scripts": {
+    "start": "node ./server/index.js",
+    "start:watch": "nodemon ./server/index.js",
     "lint": "eslint \"**/*.{ts,tsx,js}\"",
     "lint:fix": "eslint \"**/*.{ts,tsx,js}\" --fix",
     "format": "prettier \"**/*.{ts,tsx,js,css}\" --write",
@@ -43,5 +45,15 @@
   },
   "engines": {
     "node": ">=10"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.4.1",
+    "mongoose": "^5.11.15",
+    "morgan": "^1.10.0"
   }
 }
