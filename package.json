@@ -12,6 +12,7 @@
     "build:server": "tsc -p .",
     "build": "npm run build:server && npm run build:client",
     "dev": "concurrently \"npm run watch:server\" \"cd client && npm start\"",
+    "prod": "npm run build:client && cross-env NODE_ENV=production npm run watch:server",
     "clean:soft": "rm -rf dist && cd client && rm -rf build",
     "clean:client": "cd client && rm -rf node_modules build",
     "clean:server": "rm -rf node_modules dist",
@@ -32,22 +33,24 @@
     "@types/node": "^14.14.27",
     "@types/passport": "^1.0.6",
     "@types/passport-google-oauth20": "^2.0.6",
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
     "concurrently": "^5.3.0",
-    "eslint": "^7.19.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.20.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^5.0.9",
     "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.1.0",
-    "serve": "^11.3.2",
     "ts-node": "^9.1.1",
     "ts-node-dev": "^1.1.1",
     "typescript": "^4.1.5"
@@ -58,7 +61,7 @@
     }
   },
   "lint-staged": {
-    "**/*.{ts,tsx,js,css}": [
+    "(server|client)/**/*.{ts,tsx}": [
       "npm run format:staged",
       "eslint --cache --fix"
     ]

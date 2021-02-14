@@ -1,3 +1,4 @@
+/* eslint-disable import/first */ // env variables should be loaded first
 import express, { Application } from 'express';
 import { config as dotenvConfig } from 'dotenv';
 dotenvConfig();
@@ -32,7 +33,6 @@ app.use('/api', routes);
 if (app.get('env') === 'production') {
   app.use('/', expressStaticGzip('client/build', {}));
 }
-
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}/`);
 });

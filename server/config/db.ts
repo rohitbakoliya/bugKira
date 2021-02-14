@@ -11,7 +11,7 @@ const connectDB = mongoose
   .then(() => console.log('Connected to database'))
   .catch(() => {
     console.log('Failed to connect to database.');
-    process.exit(0);
+    process.exit(1);
   });
 
 export default connectDB;
