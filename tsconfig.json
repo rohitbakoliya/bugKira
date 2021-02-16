@@ -13,7 +13,6 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "moduleResolution": "node",
-    "sourceMap": true,
     "outDir": "dist",
     "rootDir": "server",
     "allowJs": true,
