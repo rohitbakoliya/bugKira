@@ -1,6 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
-
+import utils from './utils.style';
 const GlobalStyles = createGlobalStyle`
+  ${utils}
   * {
     box-sizing: border-box;
   }
@@ -16,6 +17,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
+    font-family: inherit;
     height: 100vh;
     color: ${p => p.theme.colors.black};
     background: ${p => p.theme.colors.white};
@@ -44,6 +46,9 @@ const GlobalStyles = createGlobalStyle`
     text-decoration: none;
     line-height: 1.5em;
     color: ${p => p.theme.colors.black};
+  }
+  .svg-inline--fa {
+    margin: 0px 5px
   }
 `;
 

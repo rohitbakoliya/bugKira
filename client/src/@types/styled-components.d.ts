@@ -4,9 +4,10 @@ import * as styled from 'styled-components';
 // extending default theme interface
 declare module 'styled-components' {
   interface DefaultTheme {
-    variants?: {
+    variants: {
       primary: CSSProp;
       secondary: CSSProp;
+      warning: CSSProp;
       danger: CSSProp;
       success: CSSProp;
     };
@@ -21,6 +22,8 @@ declare module 'styled-components' {
       gray: string;
       green: string;
       greenlight: string;
+      yellow: string;
+      yellowlight: string;
       red: string;
       redlight: string;
       cardBg: string;
@@ -41,6 +44,14 @@ declare module 'styled-components' {
       huge: number;
     };
     border: string;
+    spacings: {
+      top: number;
+      bottom: number;
+      left: number;
+      right: number;
+      my: string;
+      mx: string;
+    };
     media: {
       mobileS: string;
       mobile: string;

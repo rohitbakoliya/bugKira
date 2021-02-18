@@ -1,8 +1,11 @@
 import React from 'react';
-const Signup = () => {
+import { Link } from 'react-router-dom';
+
+const Signup: React.FC = () => {
   return (
     <>
       <div>Signup page</div>
+      <Link to='/'>SignUp</Link>
     </>
   );
 };

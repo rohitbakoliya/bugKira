@@ -1,5 +1,5 @@
 import { DefaultTheme } from 'styled-components';
-
+import { colorVariants } from '@bug-ui';
 const colors = {
   primary: '#586FFA',
   secondary: '#8B9AF4',
@@ -11,6 +11,8 @@ const colors = {
   gray: '#A5ADC6',
   green: '#25B93E',
   greenlight: '#CEFDD7',
+  yellow: '#F8EB76',
+  yellowlight: '#FCF4AF',
   red: '#FF5555',
   redlight: '#FFDADA',
   cardBg: '#F7F8FF',
@@ -32,6 +34,9 @@ const size = {
 };
 
 const theme: DefaultTheme = {
+  variants: {
+    ...colorVariants,
+  },
   colors,
   font,
   border: `2px solid ${colors.offwhite}`,
@@ -42,6 +47,14 @@ const theme: DefaultTheme = {
     large: 15,
     xlarge: 30,
     huge: 40,
+  },
+  spacings: {
+    top: 40,
+    bottom: 40,
+    left: 25,
+    right: 25,
+    my: '20px',
+    mx: '20px',
   },
   media: {
     mobileS: `max-width: ${size.mobileS}`,
