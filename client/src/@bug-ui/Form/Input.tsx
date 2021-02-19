@@ -2,10 +2,12 @@ import React, { Ref } from 'react';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import styled from 'styled-components/macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ErrorMessage } from '@hookform/error-message';
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   icon: IconProp;
   inputRef?: Ref<HTMLInputElement>;
+  errors?: any;
 }
 
 interface LabelProps {
@@ -15,6 +17,23 @@ interface LabelProps {
 const InputWrapper = styled.div`
   margin-bottom: 10px;
   width: 100%;
+  .text--error {
+    font-size: 12px;
+    margin-top: 5px;
+    margin-left: 16px;
+    transition: 0.3s;
+    transform: translateY(-20px);
+    opacity: 0;
+
+    &:before {
+      content: '* ';
+    }
+  }
+  .show-error {
+    transform: translateY(0);
+    opacity: 1;
+    transition: 0.3s;
+  }
 `;
 const InputLabel = styled.label<LabelProps>`
   display: flex;
@@ -51,7 +70,7 @@ const StyledInput = styled.input`
   }
 `;
 
-export const Input: React.FC<Props> = ({ icon, inputRef, ...rest }) => {
+export const Input: React.FC<Props> = ({ icon, inputRef, errors, ...rest }) => {
   return (
     <InputWrapper>
       <InputLabel>
@@ -60,6 +79,11 @@ export const Input: React.FC<Props> = ({ icon, inputRef, ...rest }) => {
           <FontAwesomeIcon icon={icon} />
         </span>
       </InputLabel>
+      {errors && (
+        <div className={`text--error ${errors[rest.name as string] && 'show-error'}`}>
+          <ErrorMessage name={rest.name as string} errors={errors} />
+        </div>
+      )}
     </InputWrapper>
   );
 };
