@@ -6,7 +6,6 @@ const LoginWrapper = styled.div`
   display: flex;
   justify-content: center;
   .logo {
-    width: 100px;
     margin: 5px 0;
   }
   form {

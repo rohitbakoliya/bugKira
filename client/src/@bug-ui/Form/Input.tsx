@@ -73,7 +73,7 @@ const StyledInput = styled.input`
 export const Input: React.FC<Props> = ({ icon, inputRef, errors, ...rest }) => {
   return (
     <InputWrapper>
-      <InputLabel>
+      <InputLabel indicateError={errors && errors[rest.name as string]}>
         <StyledInput ref={inputRef} {...rest} />
         <span>
           <FontAwesomeIcon icon={icon} />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Ref } from 'react';
 import avatarDefault from 'assets/images/avatar-default.jpg';
 import AvatarContainer, { AvatarUploaderWrapper } from './AvatarUploader.style';
 import { CSSProperties } from 'styled-components';
@@ -14,6 +14,7 @@ interface Props {
   name?: string;
   file?: PreviewFile;
   handleFile: (file: any) => void;
+  inputRef?: Ref<HTMLInputElement>;
 }
 
 const AvatarUploader: React.FC<Props> = ({ size, name, file, handleFile }) => {
@@ -29,11 +30,14 @@ const AvatarUploader: React.FC<Props> = ({ size, name, file, handleFile }) => {
       switch (errorCode) {
         case 'file-invalid-type':
           setError('Invalid File type');
+          handleFile(undefined);
           break;
         case 'file-too-large':
-          setError('Image too big, max allowed size is 2MB');
+          handleFile(undefined);
+          setError('Image too big, max allowed size is 1MB');
           break;
         default:
+          handleFile(undefined);
           setError('Something went wrong!');
           break;
       }
@@ -55,7 +59,7 @@ const AvatarUploader: React.FC<Props> = ({ size, name, file, handleFile }) => {
   return (
     <AvatarUploaderWrapper>
       <Flex justify='center' align='center' direction='column'>
-        <AvatarContainer size={size}>
+        <AvatarContainer size={size} indicateError={error ? true : false}>
           <div {...getRootProps({ className: 'dropzone' })}>
             <input type='file' name={name} {...getInputProps()} />
             <p>Change Avatar</p>

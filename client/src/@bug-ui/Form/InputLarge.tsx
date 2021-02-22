@@ -1,5 +1,5 @@
+import React, { Ref } from 'react';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import React from 'react';
 import styled from 'styled-components';
 import Input from './Input';
 
@@ -31,11 +31,13 @@ const InputWrapper = styled.div`
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   icon: IconProp;
+  inputRef?: Ref<HTMLInputElement>;
+  errors: any;
 }
 
-export const InputLarge: React.FC<Props> = ({ icon, ...rest }) => (
+export const InputLarge: React.FC<Props> = ({ icon, inputRef, errors, ...rest }) => (
   <InputWrapper>
-    <Input icon={icon} {...rest} />
+    <Input icon={icon} inputRef={inputRef} {...rest} errors={errors} />
   </InputWrapper>
 );
 export default InputLarge;

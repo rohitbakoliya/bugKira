@@ -1,6 +1,9 @@
 import { css } from 'styled-components';
 
 export default css`
+  .text--center {
+    text-align: center;
+  }
   .text--bold {
     font-family: ${p => p.theme.font.primaryBold};
   }

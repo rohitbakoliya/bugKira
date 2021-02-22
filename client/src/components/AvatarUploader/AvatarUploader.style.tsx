@@ -1,10 +1,15 @@
 import styled, { CSSProperties } from 'styled-components';
 
-const AvatarContainer = styled.div<{ size?: CSSProperties['width'] }>`
+interface IAvatarContainerProps {
+  size?: CSSProperties['width'];
+  indicateError?: boolean;
+}
+
+const AvatarContainer = styled.div<IAvatarContainerProps>`
   position: relative;
   width: ${p => p.size || '130px'};
   height: ${p => p.size || '130px'};
-  border: ${p => p.theme.border};
+  border: ${p => (p.indicateError ? `1px solid ${p.theme.colors.red}` : p.theme.border)};
   outline: none;
   border-radius: 50%;
   overflow: hidden;
