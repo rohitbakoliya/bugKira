@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Flex, IconLink } from '@bug-ui';
 import { Input, InputLarge } from '@bug-ui/Form';
 import AvatarUploader from 'components/AvatarUploader';
@@ -9,12 +10,20 @@ import AppLogo from 'components/Logo';
 
 import SignupSchema from './SignupSchema';
 import SignupWrapper from '../Login/Login.style';
+import { StoreState } from 'store';
+import { signupUser } from 'store/ducks';
 interface PreviewFile extends File {
   preview?: any;
 }
 
 const Signup: React.FC = () => {
   const [file, setFile] = useState<PreviewFile>();
+  const dispatch = useDispatch();
+  const [isLoading, signupError] = useSelector((state: StoreState) => [
+    state.loading['user/SIGN_UP'],
+    state.error['user/SIGN_UP'],
+  ]);
+  console.log('from Signup.tsx', isLoading, signupError);
   const { register, handleSubmit, errors } = useForm({
     mode: 'onChange',
     resolver: yupResolver(SignupSchema),
@@ -27,8 +36,10 @@ const Signup: React.FC = () => {
     for (let name in data) {
       formData.append(name, data[name]);
     }
-    formData.forEach(f => console.log(f));
-    // TODO: dispatch an action for SIGN_UP
+    // TODO: add toast
+    dispatch(signupUser(formData)).then(() => {
+      console.log(`from signup.tsx: signuped successfully`);
+    });
   };
   return (
     <SignupWrapper>
@@ -44,6 +55,7 @@ const Signup: React.FC = () => {
             placeholder='Enter username'
             type='text'
             name='username'
+            autoComplete='off'
             errors={errors}
             inputRef={register}
           />
@@ -71,7 +83,12 @@ const Signup: React.FC = () => {
             errors={errors}
             inputRef={register}
           />
-          <Button type='submit' icon='arrow-right' width='50%'>
+          <Button
+            isLoading={isLoading as boolean}
+            type='submit'
+            icon='arrow-right'
+            width='50%'
+          >
             Signup
           </Button>
         </form>

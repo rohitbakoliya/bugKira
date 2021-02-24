@@ -5,7 +5,7 @@ import theme from '@bug-ui/config-ui/theme';
 import '@bug-ui/config-ui/fontLib';
 import MainRouter from './routes/routes';
 import GlobalStyles from './styles/globalStyles';
-import store, { history } from 'redux/configStore';
+import { history, store } from 'store';
 
 const App = () => (
   <StoreProvider store={store}>

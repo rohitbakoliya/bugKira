@@ -2,8 +2,11 @@ import { createBrowserHistory } from 'history';
 
 const history = createBrowserHistory();
 
-//* https://github.com/ReactTraining/react-router/issues/2144#issuecomment-153899046
+// ! history version downgraded to history@4.10.1 due to incompetiblity with react-router-dom v5
+// * https://github.com/ReactTraining/history/issues/803
 
+/*
+// * https://github.com/ReactTraining/react-router/issues/2144#issuecomment-153899046
 history.listen(location => {
   // Use setTimeout to make sure this runs after React Router's own listener
   setTimeout(() => {
@@ -27,5 +30,5 @@ history.listen(location => {
     }
   });
 });
-
+*/
 export default history;
