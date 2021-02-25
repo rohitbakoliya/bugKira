@@ -11,8 +11,8 @@ const colors = {
   gray: '#A5ADC6',
   green: '#25B93E',
   greenlight: '#CEFDD7',
-  yellow: '#F8EB76',
-  yellowlight: '#FCF4AF',
+  yellow: '#FFD43B',
+  yellowlight: '#FFFCE2',
   red: '#FF5555',
   redlight: '#FFDADA',
   cardBg: '#F7F8FF',
@@ -32,13 +32,18 @@ const size = {
   desktop: '1024px',
   desktopL: '1440px',
 };
-
+const shadows = {
+  xsmall: `0px 5px 10px rgba(0, 0, 0, 0.05)`,
+  small: `0 5px 10px rgba(0, 0, 0, 0.1)`,
+  medium: `0px 10px 10px rgba(0, 0, 0, 0.2)`,
+};
 const theme: DefaultTheme = {
   variants: {
     ...colorVariants,
   },
   colors,
   font,
+  shadows,
   border: `2px solid ${colors.offwhite}`,
   space: {
     none: 0,

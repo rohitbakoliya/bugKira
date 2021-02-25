@@ -8,7 +8,7 @@ const StyledGB = styled(Button)`
   align-items: center;
   color: ${p => p.theme.colors.black};
   background-color: white;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: ${p => p.theme.shadows.small};
   margin: 10px auto 25px auto !important;
   img {
     margin-right: ${p => p.theme.space.medium}px;

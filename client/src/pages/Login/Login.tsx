@@ -6,6 +6,7 @@ import { StoreState } from 'store';
 import { loginUser } from 'store/ducks';
 import { Input } from '@bug-ui/Form';
 import { Button, Flex, IconLink } from '@bug-ui';
+import toast from 'react-hot-toast';
 import LoginSchema from './LoginSchema';
 import LoginWrapper from './Login.style';
 import GoogleButton from 'components/GoogleButton';
@@ -24,10 +25,14 @@ const Login: React.FC = () => {
     resolver: yupResolver(LoginSchema),
   });
   const onSubmit = (data: { email: string; password: string }) => {
-    // TODO: welcome back toast
-    dispatch(loginUser(data)).then(() => {
-      console.log('Logged in successfully!');
-    });
+    dispatch(loginUser(data))
+      .then(() => {
+        // TODO: add welcome back ${name} toast
+        toast.success('Logged in successfully!');
+      })
+      .catch((err: string) => {
+        toast.error(err);
+      });
   };
   return (
     <LoginWrapper>

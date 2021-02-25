@@ -3,8 +3,11 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGoogle, faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import {
   faArrowRight,
+  faCheckCircle,
   faEdit,
   faEnvelope,
+  faExclamationCircle,
+  faInfoCircle,
   faKey,
   faLock,
   faSpinner,
@@ -22,5 +25,8 @@ library.add(
   faUser,
   faLock,
   faKey,
-  faSpinner
+  faSpinner,
+  faCheckCircle,
+  faExclamationCircle,
+  faInfoCircle
 );

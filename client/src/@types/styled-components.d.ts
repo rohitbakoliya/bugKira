@@ -35,6 +35,11 @@ declare module 'styled-components' {
       primaryMedium: string;
       primaryLight: string;
     };
+    shadows: {
+      xsmall: string;
+      small: string;
+      medium: string;
+    };
     space: {
       none: number;
       small: number;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,6 +13,7 @@ import SignupSchema from './SignupSchema';
 import SignupWrapper from '../Login/Login.style';
 import { StoreState } from 'store';
 import { signupUser } from 'store/ducks';
+
 interface PreviewFile extends File {
   preview?: any;
 }
@@ -19,11 +21,7 @@ interface PreviewFile extends File {
 const Signup: React.FC = () => {
   const [file, setFile] = useState<PreviewFile>();
   const dispatch = useDispatch();
-  const [isLoading, signupError] = useSelector((state: StoreState) => [
-    state.loading['user/SIGN_UP'],
-    state.error['user/SIGN_UP'],
-  ]);
-  console.log('from Signup.tsx', isLoading, signupError);
+  const isLoading = useSelector((state: StoreState) => state.loading['user/SIGN_UP']);
   const { register, handleSubmit, errors } = useForm({
     mode: 'onChange',
     resolver: yupResolver(SignupSchema),
@@ -36,11 +34,16 @@ const Signup: React.FC = () => {
     for (let name in data) {
       formData.append(name, data[name]);
     }
-    // TODO: add toast
-    dispatch(signupUser(formData)).then(() => {
-      console.log(`from signup.tsx: signuped successfully`);
-    });
+
+    dispatch(signupUser(formData))
+      .then(() => {
+        toast.success('Signuped successfully');
+      })
+      .catch((e: string) => {
+        toast.error(e);
+      });
   };
+
   return (
     <SignupWrapper>
       <Flex direction='column' justify='center' align='center'>
@@ -83,12 +86,7 @@ const Signup: React.FC = () => {
             errors={errors}
             inputRef={register}
           />
-          <Button
-            isLoading={isLoading as boolean}
-            type='submit'
-            icon='arrow-right'
-            width='50%'
-          >
+          <Button isLoading={isLoading as boolean} type='submit' icon='arrow-right' width='50%'>
             Signup
           </Button>
         </form>
