@@ -26,13 +26,16 @@
   "license": "MIT",
   "devDependencies": {
     "@types/compression": "^1.7.0",
+    "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.9",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.11",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/morgan": "^1.9.2",
     "@types/node": "^14.14.27",
     "@types/passport": "^1.0.6",
     "@types/passport-google-oauth20": "^2.0.6",
+    "@types/passport-jwt": "^3.0.5",
     "@typescript-eslint/eslint-plugin": "^4.15.0",
     "@typescript-eslint/parser": "^4.15.0",
     "concurrently": "^5.3.0",
@@ -62,7 +65,7 @@
     }
   },
   "lint-staged": {
-    "**/*.{ts,tsx}": [
+    "*.{ts,tsx}": [
       "npm run format:staged",
       "eslint --cache --fix"
     ]
@@ -73,15 +76,19 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-static-gzip": "^2.1.1",
     "helmet": "^4.4.1",
+    "http-status-codes": "^2.1.4",
     "joi": "^17.4.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.15",
     "morgan": "^1.10.0",
     "passport": "^0.4.1",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "^4.0.0"
   }
 }

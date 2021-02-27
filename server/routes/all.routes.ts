@@ -1,14 +1,14 @@
 import express, { Response } from 'express';
-import authRoutes from './authRoutes';
+import userRoute from './user.route';
 
 const router = express.Router();
 
-// auth routes
-router.use('/auth', authRoutes);
+// user routes
+router.use('/user', userRoute);
 
 // other routes
 router.use('/*', (_, res: Response) => {
-  res.json({ success: false, error: 'No api endpoint found!' });
+  res.status(400).json({ success: false, error: 'No api endpoint found!' });
 });
 
 export default router;

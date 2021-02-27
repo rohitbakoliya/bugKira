@@ -1,7 +1,8 @@
 import { IAction } from 'store';
 
-// Actions
+// ? idea: https://github.com/erikras/ducks-modular-redux
 
+// Actions
 const DEFAULT_STATE = {};
 
 // Reducer - default export

@@ -14,11 +14,7 @@ import AppLogo from 'components/Logo';
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
-  const [isLoading, loginError] = useSelector((state: StoreState) => [
-    state.loading['user/LOGIN'],
-    state.error['user/LOGIN'],
-  ]);
-  console.log('from login.tsx', isLoading, loginError);
+  const isLoading = useSelector((state: StoreState) => state.loading['user/LOGIN']);
 
   const { register, handleSubmit, errors } = useForm({
     mode: 'onChange',
