@@ -10,6 +10,7 @@ import {
   faInfoCircle,
   faKey,
   faLock,
+  faPaperPlane,
   faSignOutAlt,
   faSpinner,
   faUser,
@@ -30,5 +31,6 @@ library.add(
   faCheckCircle,
   faExclamationCircle,
   faInfoCircle,
-  faSignOutAlt
+  faSignOutAlt,
+  faPaperPlane
 );

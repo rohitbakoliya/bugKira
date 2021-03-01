@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 import { CLIENT_URL } from '../config/siteUrls';
-import { checkAuth, login, logout, signup } from '../controllers/user.controller';
+import { checkAuth, login, logout, signup, verifyEmail } from '../controllers/user.controller';
 import { generateToken } from '../middlewares/generateToken';
 import { signupErrorHandler } from '../middlewares/authErrorHandler';
 import upload from '../middlewares/fileUpload';
@@ -37,4 +37,6 @@ router.post('/login', login);
 router.get('/logout', passportJWT, logout);
 
 router.post('/signup', avatarUpload, signupErrorHandler, signup);
+
+router.get('/verify-email', verifyEmail);
 export default router;
