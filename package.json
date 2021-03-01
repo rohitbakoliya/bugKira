@@ -11,6 +11,7 @@
     "build:client": "npm run build --prefix client",
     "build:server": "tsc -b .",
     "build": "npm run build:server && npm run build:client",
+    "heroku-prebuild": "cd client && npm install --dev",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run build",
     "dev": "concurrently \"npm run watch:server\" \"cd client && npm start\"",
     "prod": "npm run build:client && cross-env NODE_ENV=production npm run watch:server",
