@@ -7,7 +7,6 @@ import { Button, Flex, IconLink } from '@bug-ui';
 import { Input, InputLarge } from '@bug-ui/Form';
 import AvatarUploader from 'components/AvatarUploader';
 import GoogleButton from 'components/GoogleButton';
-import AppLogo from 'components/Logo';
 
 import SignupSchema from './SignupSchema';
 import SignupWrapper from '../Login/Login.style';
@@ -20,6 +19,7 @@ interface PreviewFile extends File {
 
 const Signup: React.FC = () => {
   const [file, setFile] = useState<PreviewFile>();
+  const [fileError, setFileError] = useState<string>('');
   const dispatch = useDispatch();
   const isLoading = useSelector((state: StoreState) => state.loading['user/SIGN_UP']);
   const { register, handleSubmit, errors } = useForm({
@@ -30,11 +30,12 @@ const Signup: React.FC = () => {
     const formData = new FormData();
     if (file) {
       formData.append('image', file);
+    } else {
+      return setFileError('Image is Required');
     }
     for (let name in data) {
       formData.append(name, data[name]);
     }
-
     dispatch(signupUser(formData))
       .then(() => {
         toast.success('Signuped successfully');
@@ -47,24 +48,39 @@ const Signup: React.FC = () => {
   return (
     <SignupWrapper>
       <Flex direction='column' justify='center' align='center'>
-        <AppLogo width='50px' />
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* 
-            // ? avatar is not required for now
+            // ? avatar is required for now
           */}
-          <AvatarUploader name='image' file={file} handleFile={file => setFile(file)} />
+          <AvatarUploader
+            name='avatar'
+            file={file}
+            handleFile={file => setFile(file)}
+            handleError={err => setFileError(err)}
+            fileError={fileError}
+          />
           <InputLarge
-            icon='user'
-            placeholder='Enter username'
+            icon='edit'
+            placeholder='Username'
             type='text'
             name='username'
             autoComplete='off'
             errors={errors}
             inputRef={register}
           />
+          {/* 
+          // ? name is not required for now
+          <Input
+            icon='user'
+            placeholder='full name'
+            type='text'
+            name='name'
+            errors={errors}
+            inputRef={register}
+          /> */}
           <Input
             icon='envelope'
-            placeholder='example@gmail.com'
+            placeholder='email@example.com'
             type='email'
             name='email'
             errors={errors}

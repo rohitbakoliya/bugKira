@@ -1,7 +1,6 @@
-import React, { useEffect, useState, Ref } from 'react';
+import React, { useEffect, useState } from 'react';
 import avatarDefault from 'assets/images/avatar-default.jpg';
 import AvatarContainer, { AvatarUploaderWrapper } from './AvatarUploader.style';
-import { CSSProperties } from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 import { Flex } from '@bug-ui';
 
@@ -10,20 +9,28 @@ interface PreviewFile {
 }
 
 interface Props {
-  size?: CSSProperties['width'];
-  name?: string;
+  size?: React.CSSProperties['width'];
+  name: string;
   file?: PreviewFile;
   handleFile: (file: any) => void;
-  inputRef?: Ref<HTMLInputElement>;
+  handleError: (file: any) => void;
+  fileError?: string | null;
 }
 
-const AvatarUploader: React.FC<Props> = ({ size, name, file, handleFile }) => {
+const AvatarUploader: React.FC<Props> = ({
+  size,
+  name,
+  file,
+  handleFile,
+  fileError,
+  handleError,
+}) => {
   const [error, setError] = useState<string>();
-
   const onDrop = (acceptedFiles: any, rejectedFiles: any): void => {
     if (acceptedFiles.length !== 0) {
       acceptedFiles[0].preview = URL.createObjectURL(acceptedFiles[0]);
       handleFile(acceptedFiles[0]);
+      handleError('');
       setError('');
     } else if (rejectedFiles.length !== 0) {
       const errorCode = rejectedFiles[0].errors[0].code;
@@ -44,7 +51,7 @@ const AvatarUploader: React.FC<Props> = ({ size, name, file, handleFile }) => {
     }
   };
   const { getRootProps, getInputProps } = useDropzone({
-    accept: 'image/*',
+    accept: ['image/jpeg', 'image/jpg', 'image/png'],
     multiple: false,
     maxSize: 1 * 1024 * 1024,
     onDrop,
@@ -61,15 +68,17 @@ const AvatarUploader: React.FC<Props> = ({ size, name, file, handleFile }) => {
       <Flex justify='center' align='center' direction='column'>
         <AvatarContainer size={size} indicateError={error ? true : false}>
           <div {...getRootProps({ className: 'dropzone' })}>
+            {/* 
+             // * input element already have ref from react-dropzone
+            */}
             <input type='file' name={name} {...getInputProps()} />
             <p>Change Avatar</p>
           </div>
-          <img
-            // * or may be `!error` can be removed
-            src={file && !error ? file.preview : avatarDefault}
-            alt={file ? 'avatar' : 'default avatar'}
-          />
+          <img src={file ? file.preview : avatarDefault} alt={file ? 'avatar' : 'default avatar'} />
         </AvatarContainer>
+        {fileError && !error && (
+          <div className={`text--error ${fileError && 'show-error'}`}>{fileError}</div>
+        )}
         <div className={`text--error ${error && 'show-error'}`}>{error}</div>
       </Flex>
     </AvatarUploaderWrapper>

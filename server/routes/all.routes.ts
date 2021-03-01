@@ -1,4 +1,5 @@
 import express, { Response } from 'express';
+import httpStatus from 'http-status-codes';
 import userRoute from './user.route';
 
 const router = express.Router();
@@ -8,7 +9,7 @@ router.use('/user', userRoute);
 
 // other routes
 router.use('/*', (_, res: Response) => {
-  res.status(400).json({ success: false, error: 'No api endpoint found!' });
+  res.status(httpStatus.NOT_IMPLEMENTED).json({ error: 'Api endpoint Not Implemented!' });
 });
 
 export default router;

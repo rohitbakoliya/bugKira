@@ -1,5 +1,6 @@
-import Joi from 'joi';
-import mongoose, { Document, Schema } from 'mongoose';
+import Joi, { ValidationResult } from 'joi';
+import mongoose, { Document } from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 type Provider = 'google' | 'local';
 export interface IUser extends Document {
@@ -16,11 +17,11 @@ export interface IUser extends Document {
   googleId: string;
 }
 
-export const UserSchema: Schema = new mongoose.Schema(
+export const UserSchema = new mongoose.Schema<IUser>(
   {
     name: {
       type: String,
-      required: true,
+      // required: true,
       trim: true,
       minLength: 2,
       maxLength: 100,
@@ -71,15 +72,44 @@ export const UserSchema: Schema = new mongoose.Schema(
   { timestamps: true }
 );
 
+UserSchema.pre('save', function (next) {
+  if (!this.provider.includes('local')) next();
+  // to only hash password when user signed up or update their password
+  if (this.isModified('password') || this.isNew) {
+    try {
+      // Hash Password
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(this.password, salt);
+      this.password = hashedPassword;
+      next();
+    } catch (err) {
+      next(err);
+    }
+  } else {
+    return next();
+  }
+});
+
+UserSchema.methods.isValidPassword = async function (password) {
+  try {
+    // Check/Compares password
+    return await bcrypt.compare(password, this.password);
+  } catch (err) {
+    console.log(err);
+    throw new Error(err);
+  }
+};
+
+// create the model
 export const User = mongoose.model<IUser>('User', UserSchema);
 
-// validation
-export const validateUserSignup = (user: any) => {
+// input validation
+export const validateUserSignup = (user: any): ValidationResult => {
   const SignupSchema = Joi.object({
     // name: Joi.string().required().min(2).max(50).trim(),
     username: Joi.string()
       .required()
-      .pattern(/^[a-zA-z0-9._-]+$/, 'Only . _ - these special symbol are allowed')
+      .pattern(/(^[A-Za-z0-9]+(_|.)?[A-Za-z0-9]+$)/, 'Invalid username')
       .min(4)
       .max(50)
       .trim(),
@@ -89,13 +119,29 @@ export const validateUserSignup = (user: any) => {
     avatar: Joi.string(),
     createdAt: Joi.date().default(Date.now),
   });
-  SignupSchema.validate(user);
+  return SignupSchema.validate(user);
 };
 
-export const validateUserLogin = (user: any) => {
-  const schema = Joi.object({
-    email: Joi.string().min(5).max(100).required().email({ minDomainSegments: 2 }),
+/**
+ * @param user express user
+ * @param hasEmail email is used for login
+ */
+export const validateUserLogin = (user: any, hasEmail: boolean): ValidationResult => {
+  if (hasEmail) {
+    const emailSchema = Joi.object({
+      uoe: Joi.string().min(5).max(100).required().email({ minDomainSegments: 2 }),
+      password: Joi.string().min(6).max(100).required(),
+    });
+    return emailSchema.validate(user);
+  }
+  const usernameSchema = Joi.object({
+    uoe: Joi.string()
+      .required()
+      .pattern(/(^[A-Za-z0-9]+(_|.)?[A-Za-z0-9]+$)/, 'Invalid username')
+      .min(4)
+      .max(50)
+      .trim(),
     password: Joi.string().min(6).max(100).required(),
   });
-  return schema.validate(user);
+  return usernameSchema.validate(user);
 };

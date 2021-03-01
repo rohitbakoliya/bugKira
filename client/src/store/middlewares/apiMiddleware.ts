@@ -39,24 +39,26 @@ export const ApiMiddleware = ({ getState, dispatch }: apiProps) => (next: any) =
     dispatch({ type: onRequest });
   }
   try {
-    const { data } = await http({
+    // grabing data object that was originally created by axios
+    let { data } = await http({
       method,
       url,
       data: formData,
     });
-    console.log(`data from ApiMiddleware: `, data);
+    // normalization of response
+    data = data.data;
     if (typeof onSuccess === 'function') {
       onSuccess(dispatch, data);
     } else {
       dispatch({ type: onSuccess, payload: data });
     }
+    return Promise.resolve(data);
   } catch (err) {
     if (typeof onFailure === 'function') {
       onFailure(dispatch, err);
     } else {
       dispatch({ type: onFailure, payload: err || 'Something went wrong' });
     }
-    console.error(`error from ApiMiddleware: `, err);
     return Promise.reject(err);
   }
 };

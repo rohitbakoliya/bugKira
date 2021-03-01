@@ -10,6 +10,7 @@ import {
   faInfoCircle,
   faKey,
   faLock,
+  faSignOutAlt,
   faSpinner,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
@@ -28,5 +29,6 @@ library.add(
   faSpinner,
   faCheckCircle,
   faExclamationCircle,
-  faInfoCircle
+  faInfoCircle,
+  faSignOutAlt
 );

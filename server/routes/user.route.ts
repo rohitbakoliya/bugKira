@@ -1,8 +1,11 @@
-import express, { Response } from 'express';
+import express from 'express';
 import passport from 'passport';
 import { CLIENT_URL } from '../config/siteUrls';
-import { checkAuth } from '../controllers/user.controller';
+import { checkAuth, login, logout, signup } from '../controllers/user.controller';
 import { generateToken } from '../middlewares/generateToken';
+import { signupErrorHandler } from '../middlewares/authErrorHandler';
+import upload from '../middlewares/fileUpload';
+const avatarUpload = upload.single('image');
 
 const router = express.Router();
 const passportGoogle = passport.authenticate('google', {
@@ -29,8 +32,9 @@ router.get('/auth/google/callback', passportGoogle, generateToken);
 
 router.get('/check-auth', passportJWT, checkAuth);
 
-router.get('/', (_, res: Response) => {
-  res.send('Hello world');
-});
+router.post('/login', login);
 
+router.get('/logout', passportJWT, logout);
+
+router.post('/signup', avatarUpload, signupErrorHandler, signup);
 export default router;

@@ -29,7 +29,6 @@ const GoogleButton: React.FC<Props> = props => {
   const authURL = SERVER_URL + authEndPoint;
 
   const succssEventListener = useCallback(() => {
-    console.log(`successEventListener called`);
     window.addEventListener('message', event => {
       if (event.origin === SERVER_URL && event.data === 'success') {
         dispatch(checkAuth())
@@ -46,7 +45,6 @@ const GoogleButton: React.FC<Props> = props => {
 
   useEffect(() => {
     return () => {
-      console.log('event listner removed');
       window.removeEventListener('message', succssEventListener);
     };
   }, [succssEventListener]);

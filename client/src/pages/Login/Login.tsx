@@ -20,7 +20,7 @@ const Login: React.FC = () => {
     mode: 'onChange',
     resolver: yupResolver(LoginSchema),
   });
-  const onSubmit = (data: { email: string; password: string }) => {
+  const onSubmit = (data: { uoe: string; password: string }) => {
     dispatch(loginUser(data))
       .then(() => {
         // TODO: add welcome back ${name} toast
@@ -37,10 +37,11 @@ const Login: React.FC = () => {
         <h2 className='text--bold'>Hello, Welcome back!</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input
-            type='email'
-            name='email'
-            placeholder='example@gmail.com'
+            type='text'
+            name='uoe'
+            placeholder='use email or username'
             icon='envelope'
+            autoComplete='username'
             errors={errors}
             inputRef={register}
           />

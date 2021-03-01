@@ -11,6 +11,7 @@ import passport from 'passport';
 import expressStaticGzip from 'express-static-gzip';
 import cookieParser from 'cookie-parser';
 import routes from './routes/all.routes';
+import errorHandler from './middlewares/errorHandler';
 import './config/db';
 
 const PORT = process.env.PORT || 5000;
@@ -48,6 +49,9 @@ import './middlewares/passport';
 app.use(passport.initialize());
 
 app.use('/api', routes);
+
+// error handling
+app.use(errorHandler);
 
 // to serve gzipped React app
 if (app.get('env') === 'production') {

@@ -5,11 +5,11 @@ import { API, ApiActionCreator } from 'store/types';
 import { CLEAR_ALL_ERRORS } from './errors';
 
 // Actions
-export const AUTH_LOGOUT = 'auth/LOGOUT';
 export const AUTH_SET_USER = 'auth/SET_USER';
 
 export const SIGNUP = ApiActionCreator('user/SIGN_UP');
 export const LOGIN = ApiActionCreator('user/LOGIN');
+export const LOGOUT = ApiActionCreator('user/LOGOUT');
 export const CHECK_AUTH = ApiActionCreator('auth/CHECK_AUTH');
 
 export interface UserProps {
@@ -35,7 +35,7 @@ const reducer = (state = DEFAULT_STATE, action: IAction): AuthReducerState => {
   switch (action.type) {
     case CHECK_AUTH.SUCCESS:
       return { ...state, user: action.payload, isAuthenticated: true };
-    case AUTH_LOGOUT:
+    case LOGOUT.SUCCESS:
       return { ...state, user: null, isAuthenticated: false };
     case LOGIN.SUCCESS:
       return { ...state, user: action.payload, isAuthenticated: true };
@@ -46,7 +46,6 @@ const reducer = (state = DEFAULT_STATE, action: IAction): AuthReducerState => {
 export default reducer;
 
 // Action Creators - export
-export const logout = () => ({ type: AUTH_LOGOUT });
 
 // Side-effects - export
 export const checkAuth = (): ApiAction => ({
@@ -61,7 +60,7 @@ export const checkAuth = (): ApiAction => ({
   onFailure: CHECK_AUTH.FAILURE,
 });
 
-export const signupUser = (formData: FormData): ApiAction => ({
+export const signupUser = (formData: any): ApiAction => ({
   type: API,
   payload: {
     method: 'POST',
@@ -76,12 +75,12 @@ export const signupUser = (formData: FormData): ApiAction => ({
   },
   onFailure: (dispatch, err) => {
     dispatch({ type: SIGNUP.FAILURE, payload: err });
-    dispatch({ type: AUTH_LOGOUT });
+    dispatch({ type: LOGOUT.SUCCESS });
     dispatch({ type: CLEAR_ALL_ERRORS });
   },
 });
 
-export const loginUser = (formData: { email: string; password: string }): ApiAction => ({
+export const loginUser = (formData: { uoe: string; password: string }): ApiAction => ({
   type: API,
   payload: {
     method: 'POST',
@@ -96,7 +95,24 @@ export const loginUser = (formData: { email: string; password: string }): ApiAct
   },
   onFailure: (dispatch, err) => {
     dispatch({ type: LOGIN.FAILURE, payload: err });
-    dispatch({ type: AUTH_LOGOUT });
+    dispatch({ type: LOGOUT.SUCCESS });
     dispatch({ type: CLEAR_ALL_ERRORS });
+  },
+});
+
+export const logoutUser = (): ApiAction => ({
+  type: API,
+  payload: {
+    method: 'GET',
+    url: 'api/user/logout',
+    formData: null,
+  },
+  onRequest: LOGOUT.REQUEST,
+  onSuccess: (dispatch, data) => {
+    dispatch({ type: LOGOUT.SUCCESS, payload: data });
+    dispatch(push('/'));
+  },
+  onFailure: (dispatch, err) => {
+    dispatch({ type: LOGOUT.FAILURE, payload: err });
   },
 });
