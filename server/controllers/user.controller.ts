@@ -146,6 +146,9 @@ export const login = async (req: Request, res: Response) => {
           email: user.email,
           avatarUrl: user.avatarUrl,
           id: user.id,
+          bio: user.bio,
+          updatedAt: user.updatedAt,
+          createdAt: user.createdAt,
         },
       });
   } catch (err) {

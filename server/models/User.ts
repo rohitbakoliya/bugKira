@@ -72,6 +72,15 @@ export const UserSchema = new mongoose.Schema<IUser>(
   { timestamps: true }
 );
 
+UserSchema.set('toJSON', {
+  transform: function (_doc: any, ret: any) {
+    ret.id = ret._id;
+    delete ret.password;
+    delete ret._id;
+    delete ret.__v;
+  },
+});
+
 UserSchema.pre('save', function (next) {
   if (!this.provider.includes('local')) next();
   // to only hash password when user signed up or update their password
