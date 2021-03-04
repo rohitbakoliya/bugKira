@@ -45,7 +45,7 @@ export const UserSchema = new mongoose.Schema<IUser>(
     password: {
       type: String,
       minLength: 6,
-      maxLength: 50,
+      maxLength: 100, // since hased password can be longer than our 50 length limit
     },
     bio: {
       type: String,

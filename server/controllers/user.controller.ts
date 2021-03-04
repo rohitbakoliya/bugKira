@@ -3,6 +3,9 @@ import { Request, Response } from 'express';
 import httpStatus from 'http-status-codes';
 import { CLIENT_URL, SERVER_URL } from '../config/siteUrls';
 import { User, validateUserLogin } from '../models/User';
+import sgMail from '@sendgrid/mail';
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
 /**
  * @description To check authentication status
@@ -28,13 +31,13 @@ export const logout = (req: Request, res: Response) => {
  */
 export const signup = async (req: Request, res: Response) => {
   const { body } = req;
-  // * as profile is required for now
+  // * profile is required for now
   if (!req.file) {
     return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'Please Select An Image' });
   }
   // 1) save user in db
   // 2) create email verification token
-  // TODO: 3) crete verification email and send email
+  // 3) crete verification email and send email
   try {
     // create new user for sign up
     // as all possible conflicts already checked in the `signupErrorHandler` middleware
@@ -55,12 +58,22 @@ export const signup = async (req: Request, res: Response) => {
         id: savedUser.id,
       },
       SECRET,
-      { expiresIn: '2h' }
+      { expiresIn: '7d' }
     );
     // create verification link and send email
     const verificationLink = `${SERVER_URL}/api/user/verify-email?token=${vericationToken}`;
-    console.log(verificationLink);
 
+    const msg = {
+      to: savedUser.email,
+      from: 'noreply.bugkira@gmail.com',
+      subject: 'bugKira Email Verification',
+      templateId: 'd-2d409404966a41b3b874ac7b19ab3fbd',
+      dynamic_template_data: {
+        user: savedUser.name,
+        verification_link: verificationLink,
+      },
+    };
+    sgMail.send(msg);
     const data = {
       isVerified: savedUser.isVerified,
       avatarUrl: savedUser.avatarUrl,
@@ -103,9 +116,8 @@ export const login = async (req: Request, res: Response) => {
     }
 
     // make sure email is verified
-    // TODO: uncomment after adding email verication code
-    // if (!user.isVerified)
-    //   return res.status(httpStatus.FORBIDDEN).json({ error: 'Email not verified' });
+    if (!user.isVerified)
+      return res.status(httpStatus.FORBIDDEN).json({ error: 'Email not verified' });
 
     // user only signed up with google
     if (!user.password || !user.provider.includes('local')) {
@@ -152,7 +164,6 @@ export const login = async (req: Request, res: Response) => {
         },
       });
   } catch (err) {
-    console.log(err);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: 'something went wrong' });
   }
 };
@@ -185,7 +196,11 @@ export const verifyEmail = async (req: Request, res: Response) => {
 
     // now verify user account
     user.isVerified = true;
-    await user.save();
+    const savedUser = await user.save();
+    if (!savedUser)
+      return res
+        .status(httpStatus.INTERNAL_SERVER_ERROR)
+        .json({ error: 'Error while verifying user' });
 
     // if everything is good
     const token = jwt.sign(
@@ -201,7 +216,6 @@ export const verifyEmail = async (req: Request, res: Response) => {
       process.env.JWT_TOKEN_SECRET!,
       { expiresIn: '2h' }
     );
-
     return res
       .status(httpStatus.OK)
       .cookie('jwt', token, { maxAge: 2 * 60 * 60 * 1000, httpOnly: true })
@@ -217,6 +231,6 @@ export const verifyEmail = async (req: Request, res: Response) => {
     }
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ error: `something went wront while verifying your email` });
+      .json({ error: `something went wrong while verifying your email` });
   }
 };
