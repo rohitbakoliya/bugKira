@@ -2,8 +2,9 @@ import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import httpStatus from 'http-status-codes';
 import { CLIENT_URL, SERVER_URL } from '../config/siteUrls';
-import { User, validateUserLogin } from '../models/User';
+import { IUser, User, validateUserLogin } from '../models/User';
 import sgMail from '@sendgrid/mail';
+import Joi from 'joi';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
@@ -232,5 +233,49 @@ export const verifyEmail = async (req: Request, res: Response) => {
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ error: `something went wrong while verifying your email` });
+  }
+};
+
+/**
+ * @description user info
+ * @route       GET /api/user/:username
+ */
+export const getUserFromUsername = async (req: Request, res: Response) => {
+  const {
+    error,
+    value: { username },
+  } = Joi.object({
+    username: Joi.string().required().min(4).max(50),
+  }).validate({ username: req.params.username });
+  if (error) {
+    return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: error.details[0].message });
+  }
+  try {
+    // eslint-disable-next-line security/detect-non-literal-regexp
+    const user = await User.findOne({ username: new RegExp(`/^${username}$/`, 'i') }).select(
+      '-password'
+    );
+    if (!user)
+      return res
+        .status(httpStatus.NOT_FOUND)
+        .json({ error: `User not found with username ${username}` });
+    return res.status(httpStatus.OK).json({ data: user });
+  } catch (err) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: `something went wrong` });
+  }
+};
+
+/**
+ * @description current user
+ * @route       GET /api/user/me
+ */
+export const getCurrentUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.user as IUser;
+    const user = await User.findById(id).select('-password');
+    if (!user) return res.status(httpStatus.NOT_FOUND).json({ error: 'User not found' });
+    return res.status(httpStatus.OK).json({ data: user });
+  } catch (err) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: `something went wrong` });
   }
 };

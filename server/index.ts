@@ -10,6 +10,9 @@ import morgan from 'morgan';
 import compression from 'compression';
 import passport from 'passport';
 import expressStaticGzip from 'express-static-gzip';
+import rateLimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
+import xss from 'xss-clean';
 import cookieParser from 'cookie-parser';
 import routes from './routes/all.routes';
 import errorHandler from './middlewares/errorHandler';
@@ -43,6 +46,19 @@ app.use(express.json({ limit: '10kb' }));
 if (app.get('env') === 'development') {
   app.use(morgan('dev'));
 }
+app.use(mongoSanitize()); // sanitizes user-supplied data to prevent MongoDB Operator Injection.
+app.use(xss()); // sanitize user input
+
+// rate limiter
+app.set('trust proxy', 1);
+app.use(
+  '/api/',
+  rateLimit({
+    windowMs: 30 * 60 * 1000,
+    max: 500,
+  })
+);
+
 app.use(compression()); // compress response bodies
 
 // passport middlewares
