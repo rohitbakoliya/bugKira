@@ -245,14 +245,13 @@ export const getUserFromUsername = async (req: Request, res: Response) => {
     error,
     value: { username },
   } = Joi.object({
-    username: Joi.string().required().min(4).max(50),
+    username: Joi.string().required().min(4).max(50).trim(),
   }).validate({ username: req.params.username });
   if (error) {
     return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: error.details[0].message });
   }
   try {
-    // eslint-disable-next-line security/detect-non-literal-regexp
-    const user = await User.findOne({ username: new RegExp(`/^${username}$/`, 'i') }).select(
+    const user = await User.findOne({ username: RegExp(`/^${username}$/`, 'i') }).select(
       '-password'
     );
     if (!user)
