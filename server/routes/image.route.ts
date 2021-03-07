@@ -1,5 +1,4 @@
 import express from 'express';
-import rateLimit from 'express-rate-limit';
 import passport from 'passport';
 import {
   getAvatarImageByUsername,
@@ -19,21 +18,12 @@ const router = express.Router();
  * @description current user avatar
  */
 
-const getAvatarImageRateLimit = rateLimit({
-  windowMs: 30 * 60 * 1000,
-  max: 1000,
-});
 router.get('/me/avatar', passportJWT, getCurrentUserAvatar);
 
 router.patch('/me/avatar/upload', passportJWT, avatarUpload, updateProfileImage);
 
 router.get('/:username/avatar', passportJWT, getAvatarImageByUsername);
 
-router.get(
-  '/:username/avatar/raw',
-  getAvatarImageRateLimit,
-  passportJWT,
-  getRawAvatarImageByUsername
-);
+router.get('/:username/avatar/raw', passportJWT, getRawAvatarImageByUsername);
 
 export default router;

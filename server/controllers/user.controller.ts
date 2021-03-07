@@ -6,8 +6,6 @@ import { IUser, User, validateUserLogin } from '../models/User';
 import sgMail from '@sendgrid/mail';
 import Joi from 'joi';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
-
 /**
  * @description To check authentication status
  * @route       GET /api/user/check-auth
@@ -49,7 +47,7 @@ export const signup = async (req: Request, res: Response) => {
       email: body.email,
       password: body.password,
       avatar: req.file.id,
-      avatarUrl: `${CLIENT_URL}/api/user/${body.username}/avatar/raw`,
+      avatarUrl: `${SERVER_URL}/api/user/${body.username}/avatar/raw`,
     });
     const savedUser = await newUser.save();
     // create verification token using jwt
@@ -251,9 +249,9 @@ export const getUserFromUsername = async (req: Request, res: Response) => {
     return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: error.details[0].message });
   }
   try {
-    const user = await User.findOne({ username: RegExp(`/^${username}$/`, 'i') }).select(
-      '-password'
-    );
+    const user = await User.findOne({
+      username: { $regex: `^${username}$`, $options: 'i' },
+    }).select('-password');
     if (!user)
       return res
         .status(httpStatus.NOT_FOUND)

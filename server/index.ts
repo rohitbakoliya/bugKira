@@ -14,11 +14,13 @@ import rateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import cookieParser from 'cookie-parser';
+import sgMail from '@sendgrid/mail';
 import routes from './routes/all.routes';
 import errorHandler from './middlewares/errorHandler';
 import './config/db';
 
 const PORT = process.env.PORT || 5000;
+sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
 const app: Application = express();
 
