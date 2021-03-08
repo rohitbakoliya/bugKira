@@ -25,8 +25,9 @@ const removeFile = (id: any) => {
 };
 
 /**
- * @route PATCH /api/user/me/avatar/upload
- * @description upload profile picture of user
+ * @desc    upload profile picture of user
+ * @route   PATCH /api/user/me/avatar/upload
+ * @access  private
  */
 export const updateProfileImage = async (req: Request, res: Response) => {
   try {
@@ -52,8 +53,9 @@ export const updateProfileImage = async (req: Request, res: Response) => {
 };
 
 /**
- * @route GET /api/user/me/avatar
- * @description current user avatar
+ * @desc    current user avatar
+ * @route   GET /api/user/me/avatar
+ * @access  private
  */
 export const getCurrentUserAvatar = async (req: Request, res: Response) => {
   try {
@@ -77,8 +79,9 @@ export const getCurrentUserAvatar = async (req: Request, res: Response) => {
 };
 
 /**
- * @route GET /api/user/:username/avatar
- * @description avatar of user by username
+ * @desc    avatar of user by username
+ * @route   GET /api/user/:username/avatar
+ * @access  private
  */
 export const getAvatarImageByUsername = async (req: Request, res: Response) => {
   const {
@@ -112,11 +115,11 @@ export const getAvatarImageByUsername = async (req: Request, res: Response) => {
 };
 
 /**
- * @route GET /api/user/:username/avatar
- * @description raw avatar of user by username
+ * @desc    raw avatar of user by username
+ * @route   GET /api/user/:username/avatar
+ * @access  private
  */
 export const getRawAvatarImageByUsername = async (req: Request, res: Response) => {
-  // Incomplete
   const {
     error,
     value: { username },

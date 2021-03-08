@@ -12,11 +12,6 @@ const avatarUpload = upload.single('image');
 
 const router = express.Router();
 
-/**
- * @route GET /api/user/me/avatar
- * @description current user avatar
- */
-
 router.get('/me/avatar', passportJWT, getCurrentUserAvatar);
 
 router.patch('/me/avatar/upload', passportJWT, avatarUpload, updateProfileImage);

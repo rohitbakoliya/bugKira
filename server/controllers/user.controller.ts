@@ -5,8 +5,9 @@ import { IUser, User } from '../models/User';
 import Joi from 'joi';
 
 /**
- * @description user info
- * @route       GET /api/user/:username
+ * @desc    user info
+ * @route   GET /api/user/:username
+ * @access  private
  */
 export const getUserFromUsername = async (req: Request, res: Response) => {
   const {
@@ -33,8 +34,9 @@ export const getUserFromUsername = async (req: Request, res: Response) => {
 };
 
 /**
- * @description current user
- * @route       GET /api/user/me
+ * @desc    current user
+ * @route   GET /api/user/me
+ * @access  private
  */
 export const getCurrentUser = async (req: Request, res: Response) => {
   try {

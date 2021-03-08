@@ -6,8 +6,9 @@ import { CLIENT_URL, SERVER_URL } from '../config/siteUrls';
 import { User, validateUserLogin } from '../models/User';
 
 /**
- * @description To check authentication status
- * @route       GET /api/user/auth/check-auth
+ * @desc    To check authentication status
+ * @route   GET /api/user/auth/check-auth
+ * @access  private
  */
 
 export const checkAuth = (req: Request, res: Response) => {
@@ -15,8 +16,9 @@ export const checkAuth = (req: Request, res: Response) => {
 };
 
 /**
- * @description to logout current user
- * @route       GET /api/auth/user/logout
+ * @desc    to logout current user
+ * @route   GET /api/auth/user/logout
+ * @access  private
  */
 export const logout = (req: Request, res: Response) => {
   req.logOut();
@@ -24,8 +26,9 @@ export const logout = (req: Request, res: Response) => {
 };
 
 /**
- * @description to signup user
- * @route       POST /api/auth/user/signup
+ * @desc    to signup user
+ * @route   POST /api/auth/user/signup
+ * @access  public
  */
 export const signup = async (req: Request, res: Response) => {
   const { body } = req;
@@ -87,8 +90,9 @@ export const signup = async (req: Request, res: Response) => {
 };
 
 /**
- * @description to login user
- * @route       POST /api/user/auth/login
+ * @desc    to login user
+ * @route   POST /api/user/auth/login
+ * @access  public
  */
 export const login = async (req: Request, res: Response) => {
   const isEmail = /^.*(@).*$/.test(req.body.uoe);
@@ -167,8 +171,9 @@ export const login = async (req: Request, res: Response) => {
 };
 
 /**
- * @description for email verification
- * @route       GET /api/user/auth/verify-email?token=token
+ * @desc    for email verification
+ * @route   GET /api/user/auth/verify-email?token=token
+ * @access  public
  */
 export const verifyEmail = async (req: Request, res: Response) => {
   // IMPROVE: send email verification message to make toast

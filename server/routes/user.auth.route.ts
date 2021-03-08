@@ -16,8 +16,9 @@ const passportGoogle = passport.authenticate('google', {
 });
 
 /**
- * @description Auth with google
- * @route       GET /api/user/auth/google
+ * @desc    Auth with google
+ * @route   GET /api/user/auth/google
+ * @access  public
  */
 router.get(
   '/google',
@@ -25,10 +26,10 @@ router.get(
 );
 
 /**
- * @description Google auth callback
- * @route       GET /api/user/auth/google
+ * @desc    Google auth callback
+ * @route   GET /api/user/auth/google
+ * @access  public
  */
-
 router.get('/google/callback', passportGoogle, generateToken);
 
 router.get('/check-auth', passportJWT, checkAuth);
