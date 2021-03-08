@@ -75,7 +75,7 @@ app.use(
 app.use(compression()); // compress response bodies
 
 // passport middlewares
-import './middlewares/passport';
+import './middlewares/passportAuth';
 app.use(passport.initialize());
 
 app.use('/api', routes);

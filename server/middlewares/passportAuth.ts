@@ -59,7 +59,6 @@ passport.use(
 
 const JwtVerifyCallback = async (jwtPayload: any, done: VerifyCallback) => {
   try {
-    // TODO: verify => exclude password from selection
     const user = await User.findById(jwtPayload.id).select('-password -__v');
 
     if (!user) return done(undefined, false);

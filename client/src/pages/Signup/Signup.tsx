@@ -38,7 +38,7 @@ const Signup: React.FC = () => {
     }
     dispatch(signupUser(formData))
       .then(() => {
-        toast.success('Signuped successfully');
+        toast.success(`Registed successfully! please verify your email`);
       })
       .catch((e: string) => {
         toast.error(e);

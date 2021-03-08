@@ -1,5 +1,5 @@
 import express from 'express';
-import passport from 'passport';
+import { passportJWT } from '../middlewares/passportJWT';
 import {
   getAvatarImageByUsername,
   getRawAvatarImageByUsername,
@@ -8,7 +8,6 @@ import {
 } from '../controllers/image.controller';
 import upload from '../middlewares/fileUpload';
 
-const passportJWT = passport.authenticate('jwt', { session: false });
 const avatarUpload = upload.single('image');
 
 const router = express.Router();

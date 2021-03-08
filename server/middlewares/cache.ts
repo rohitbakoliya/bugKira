@@ -1,5 +1,6 @@
 import cache from 'memory-cache';
 
+// * need to take care of max-size of cache
 class MemCache {
   duration: number;
   cache: cache.CacheClass<unknown, unknown>;

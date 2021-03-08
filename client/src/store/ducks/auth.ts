@@ -52,7 +52,7 @@ export const checkAuth = (): ApiAction => ({
   type: API,
   payload: {
     method: 'GET',
-    url: '/api/user/check-auth',
+    url: '/api/user/auth/check-auth',
     formData: null,
   },
   onRequest: CHECK_AUTH.REQUEST,
@@ -64,14 +64,14 @@ export const signupUser = (formData: any): ApiAction => ({
   type: API,
   payload: {
     method: 'POST',
-    url: '/api/user/signup',
+    url: '/api/user/auth/signup',
     formData,
   },
   onRequest: SIGNUP.REQUEST,
   onSuccess: (dispatch, data) => {
     dispatch({ type: CLEAR_ALL_ERRORS });
     dispatch({ type: SIGNUP.SUCCESS });
-    dispatch(push(`/?signedup=true&email=${data.email}`));
+    dispatch(push(`/?signedup=true`));
   },
   onFailure: (dispatch, err) => {
     dispatch({ type: SIGNUP.FAILURE, payload: err });
@@ -84,7 +84,7 @@ export const loginUser = (formData: { uoe: string; password: string }): ApiActio
   type: API,
   payload: {
     method: 'POST',
-    url: '/api/user/login',
+    url: '/api/user/auth/login',
     formData,
   },
   onRequest: LOGIN.REQUEST,
@@ -104,7 +104,7 @@ export const logoutUser = (): ApiAction => ({
   type: API,
   payload: {
     method: 'GET',
-    url: 'api/user/logout',
+    url: 'api/user/auth/logout',
     formData: null,
   },
   onRequest: LOGOUT.REQUEST,
