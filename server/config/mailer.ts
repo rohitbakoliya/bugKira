@@ -54,8 +54,6 @@ export const sendVerificationMail = async ({ user }: ISendEmail): Promise<any> =
 /**
  * to send password change email
  * @param user mongo user ojbect
- * @param async boolean - async param to send email asynchronously
- * @default async true
  */
 export const sendPasswordChangeMail = async ({ user }: ISendEmail): Promise<any> => {
   try {

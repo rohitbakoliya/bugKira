@@ -1,7 +1,7 @@
 import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status-codes';
-import { CLIENT_URL, SERVER_URL } from '../config/siteUrls';
+import { CLIENT_URL, SERVER_URL } from '../config';
 import { User } from '../models/User';
 import { validateEmail, passwordValidator, validateUserLogin } from '../validators/User.validators';
 import Joi from 'joi';

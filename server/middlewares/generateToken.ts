@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status-codes';
 import jwt from 'jsonwebtoken';
-import { CLIENT_URL } from '../config/siteUrls';
+import { CLIENT_URL } from '../config';
 import { IUser } from '../models/User';
 
 export const generateToken = (req: Request, res: Response) => {

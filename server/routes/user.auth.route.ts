@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import { CLIENT_URL } from '../config/siteUrls';
+import { CLIENT_URL } from '../config';
 import { generateToken } from '../middlewares/generateToken';
 import {
   checkAuth,
