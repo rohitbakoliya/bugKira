@@ -1,9 +1,12 @@
 import jwt, { JsonWebTokenError } from 'jsonwebtoken';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status-codes';
-import sgMail from '@sendgrid/mail';
 import { CLIENT_URL, SERVER_URL } from '../config/siteUrls';
-import { User, validateUserLogin } from '../models/User';
+import { User } from '../models/User';
+import { validateEmail, passwordValidator, validateUserLogin } from '../validators/User.validators';
+import Joi from 'joi';
+import { sendPasswordChangeMail, sendVerificationMail } from '../config/mailer';
+import { EmailToken, PasswordToken } from '../models/Token';
 
 /**
  * @desc    To check authentication status
@@ -37,8 +40,7 @@ export const signup = async (req: Request, res: Response) => {
     return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: 'Please Select An Image' });
   }
   // 1) save user in db
-  // 2) create email verification token
-  // 3) crete verification email and send email
+  // 2) send user verification email email
   try {
     // create new user for sign up
     // as all possible conflicts already checked in the `signupErrorHandler` middleware
@@ -52,29 +54,10 @@ export const signup = async (req: Request, res: Response) => {
       avatarUrl: `${SERVER_URL}/api/user/${body.username}/avatar/raw`,
     });
     const savedUser = await newUser.save();
-    // create verification token using jwt
-    const SECRET = process.env.JWT_TOKEN_SECRET!;
-    const vericationToken = jwt.sign(
-      {
-        id: savedUser.id,
-      },
-      SECRET,
-      { expiresIn: '7d' }
-    );
-    // create verification link and send email
-    const verificationLink = `${SERVER_URL}/api/user/auth/verify-email?token=${vericationToken}`;
 
-    const msg = {
-      to: savedUser.email,
-      from: 'noreply.bugkira@gmail.com',
-      subject: 'bugKira Email Verification',
-      templateId: 'd-2d409404966a41b3b874ac7b19ab3fbd',
-      dynamic_template_data: {
-        user: savedUser.name,
-        verification_link: verificationLink,
-      },
-    };
-    sgMail.send(msg);
+    // send user verification email
+    // and no need to wait here
+    sendVerificationMail({ user: savedUser });
     const data = {
       isVerified: savedUser.isVerified,
       avatarUrl: savedUser.avatarUrl,
@@ -171,24 +154,26 @@ export const login = async (req: Request, res: Response) => {
 };
 
 /**
- * @desc    for email verification
- * @route   GET /api/user/auth/verify-email?token=token
+ * @desc    to verify email using token
+ * @route   GET /api/user/auth/verify-email/:token
  * @access  public
  */
 export const verifyEmail = async (req: Request, res: Response) => {
-  // IMPROVE: send email verification message to make toast
+  // @improve: notify frontend about the verifcation success or error
   try {
-    const verificationToken = req.query.token as string;
+    const verificationToken = req.params.token as string;
     if (!verificationToken)
       return res
         .status(httpStatus.BAD_REQUEST)
         .json({ error: `Email verification link is broken` });
 
-    const decoded = jwt.verify(verificationToken, process.env.JWT_TOKEN_SECRET!);
+    // finding token
+    const token = await EmailToken.findOne({ token: verificationToken });
+    if (!token)
+      return res.status(httpStatus.NOT_FOUND).json({ error: 'Unable to find verification token' });
 
-    const id = (decoded as any).id;
-    const user = await User.findById(id);
-    // find user based upon token
+    // find user corrosponding to token
+    const user = await User.findOne({ _id: token._userId });
     if (!user) {
       return res
         .status(httpStatus.NOT_FOUND)
@@ -199,41 +184,180 @@ export const verifyEmail = async (req: Request, res: Response) => {
 
     // now verify user account
     user.isVerified = true;
+    // ! may need to set `user.expires = null`
     const savedUser = await user.save();
     if (!savedUser)
       return res
         .status(httpStatus.INTERNAL_SERVER_ERROR)
         .json({ error: 'Error while verifying user' });
 
-    // if everything is good
-    const token = jwt.sign(
-      {
-        isVerified: user.isVerified,
-        username: user.username,
-        provider: user.provider,
-        name: user.name,
-        email: user.email,
-        avatarUrl: user.avatarUrl,
-        id: user.id,
-      },
-      process.env.JWT_TOKEN_SECRET!,
-      { expiresIn: '2h' }
-    );
-    return res
-      .status(httpStatus.OK)
-      .cookie('jwt', token, { maxAge: 2 * 60 * 60 * 1000, httpOnly: true })
-      .redirect(CLIENT_URL);
+    return res.status(httpStatus.OK).redirect(CLIENT_URL);
   } catch (err) {
-    if (err instanceof JsonWebTokenError) {
-      if (err.message === 'jwt expired')
-        return res.status(httpStatus.BAD_REQUEST).json({ error: `Verification link expired` });
-      else
-        return res
-          .status(httpStatus.BAD_REQUEST)
-          .json({ error: `Invalid email verification link` });
-    }
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ error: `something went wrong while verifying your email` });
+  }
+};
+
+/**
+ * @desc    to update current user's password
+ * @route   PATCH /api/user/auth/update-password/
+ * @access  private
+ */
+export const updatePassword = async (req: Request, res: Response) => {
+  const {
+    value: { oldPassword, newPassword },
+    error,
+  } = Joi.object({
+    oldPassword: passwordValidator,
+    newPassword: passwordValidator,
+    confirmPassword: passwordValidator.valid(Joi.ref('newPassword')),
+  }).validate(req.body);
+  if (error) {
+    return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: error.details[0].message });
+  }
+  try {
+    const user = await User.findById((req.user as any).id);
+    if (!user) return res.status(httpStatus.NOT_FOUND).json({ error: `user doesn't exists` });
+
+    // check wether provided oldPassword is correct or not
+    const validPassword = await user.isValidPassword(oldPassword);
+    if (!validPassword)
+      return res.status(httpStatus.FORBIDDEN).json({ error: 'Incorrect old password' });
+
+    // new password is same as old one
+    if (newPassword === oldPassword)
+      return res
+        .status(httpStatus.FORBIDDEN)
+        .json({ error: `New Password cannot be same as old password0` });
+
+    // if all good then update current password to new one
+    user.password = newPassword;
+
+    await user.save();
+    return res.status(httpStatus.OK).json({ data: 'Password updated successfully' });
+  } catch (err) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: 'something went wrong' });
+  }
+};
+
+/**
+ * @desc    to change user password usign reset password link
+ * @route   PATCH /api/user/auth/reset-password/:token
+ * @access  public
+ */
+export const resetPassword = async (req: Request, res: Response) => {
+  const {
+    value: { password },
+    error,
+  } = Joi.object({
+    password: passwordValidator,
+    confirmPassword: passwordValidator.valid(Joi.ref('password')),
+  }).validate(req.body);
+  if (error) {
+    return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: error.details[0].message });
+  }
+
+  try {
+    const verificationToken = req.params.token as string;
+    if (!verificationToken)
+      return res.status(httpStatus.BAD_REQUEST).json({ error: `Password reset link is broken` });
+    // finding token
+    const token = await PasswordToken.findOne({ token: verificationToken });
+    if (!token)
+      return res.status(httpStatus.NOT_FOUND).json({ error: 'Unable to find verification token' });
+
+    // find user corrosponding to token
+    const user = await User.findOne({ _id: token._userId });
+    if (!user) {
+      return res
+        .status(httpStatus.NOT_FOUND)
+        .json({ error: `Unable to find user associated with your email` });
+    }
+    // if email is not verified
+    if (!user.isVerified)
+      return res.status(httpStatus.BAD_REQUEST).json({ error: 'Email is not verified' });
+
+    // if all good then update current password to new one
+    user.password = password;
+    await user.save();
+
+    return res.status(httpStatus.OK).json({ data: 'Password updated successfully' });
+  } catch (err) {
+    return res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ error: `something went wrong while changing your password` });
+  }
+};
+
+/**
+ * @desc    for resending email verification link
+ * @route   POST /api/user/auth/request/verification-email
+ * @access  public
+ */
+export const requestEmailVerification = async (req: Request, res: Response) => {
+  const { value: email, error } = validateEmail(req.body.email);
+
+  if (error) {
+    return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: error.details[0].message });
+  }
+  try {
+    const user = await User.findOne({ email }).select('-password');
+    if (!user) {
+      return res
+        .status(httpStatus.NOT_FOUND)
+        .json({ error: `Unable to find user associated with your email` });
+    }
+    // user is already verified
+    if (user.isVerified)
+      return res.status(httpStatus.FORBIDDEN).json({ error: `Email is already verified` });
+
+    // send user verification email
+    // and wait until email has been sent
+    await sendVerificationMail({ user });
+    return res
+      .status(httpStatus.OK)
+      .json({ data: `A verification email was sent to ${user.email}` });
+  } catch (err) {
+    return res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ error: `something went wrong while sending you a email` });
+  }
+};
+
+/**
+ * @desc    for password reset link
+ * @route   POST /api/user/auth/request/reset-password
+ * @access  public
+ */
+export const requestPasswordReset = async (req: Request, res: Response, next: NextFunction) => {
+  const { value: email, error } = validateEmail(req.body.email);
+  if (error) {
+    return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: error.details[0].message });
+  }
+  try {
+    const user = await User.findOne({ email }).select('-password');
+    if (!user) {
+      return res
+        .status(httpStatus.NOT_FOUND)
+        .json({ error: `Unable to find user associated with your email` });
+    }
+    // if user is not verified
+    if (!user.isVerified)
+      return res.status(httpStatus.FORBIDDEN).json({ error: `Email is not verified` });
+
+    // send password reset email
+    await sendPasswordChangeMail({ user });
+
+    return res
+      .status(httpStatus.OK)
+      .json({ data: `An email containing password reset instructions was sent to ${email}` });
+  } catch (err) {
+    if (err instanceof JsonWebTokenError) {
+      return next(err);
+    }
+    return res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ error: `something went wrong while sending you a email` });
   }
 };

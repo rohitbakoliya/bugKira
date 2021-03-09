@@ -1,13 +1,12 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status-codes';
-import Joi from 'joi';
 import sharp from 'sharp';
 import { GridFSBucket } from 'mongodb';
 import mongoose from 'mongoose';
 import axios from 'axios';
 import { memCache } from '../middlewares/cache';
-
 import { IUser, User } from '../models/User';
+import { validateUsername } from '../validators/User.validators';
 
 // Initialize GridFS Stream
 // The stream is needed to read the files from the database and also to help render an image to a browser when needed
@@ -84,12 +83,7 @@ export const getCurrentUserAvatar = async (req: Request, res: Response) => {
  * @access  private
  */
 export const getAvatarImageByUsername = async (req: Request, res: Response) => {
-  const {
-    error,
-    value: { username },
-  } = Joi.object({
-    username: Joi.string().required().min(4).max(50).trim(),
-  }).validate({ username: req.params.username });
+  const { error, value: username } = validateUsername(req.params.username);
 
   // username validation
   if (error) {
@@ -116,17 +110,11 @@ export const getAvatarImageByUsername = async (req: Request, res: Response) => {
 
 /**
  * @desc    raw avatar of user by username
- * @route   GET /api/user/:username/avatar
+ * @route   GET /api/user/:username/avatar/raw
  * @access  private
  */
 export const getRawAvatarImageByUsername = async (req: Request, res: Response) => {
-  const {
-    error,
-    value: { username },
-  } = Joi.object({
-    username: Joi.string().required().min(4).max(50).trim(),
-  }).validate({ username: req.params.username });
-
+  const { error, value: username } = validateUsername(req.params.username);
   // username validation
   if (error) {
     return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: error.details[0].message });

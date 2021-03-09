@@ -2,10 +2,20 @@ import express from 'express';
 import passport from 'passport';
 import { CLIENT_URL } from '../config/siteUrls';
 import { generateToken } from '../middlewares/generateToken';
-import { checkAuth, login, logout, signup, verifyEmail } from '../controllers/user.auth.controller';
+import {
+  checkAuth,
+  login,
+  logout,
+  requestEmailVerification,
+  requestPasswordReset,
+  signup,
+  updatePassword,
+  verifyEmail,
+} from '../controllers/user.auth.controller';
 import { passportJWT } from '../middlewares/passportJWT';
 import { signupErrorHandler } from '../middlewares/authErrorHandler';
 import upload from '../middlewares/fileUpload';
+import rateLimit from 'express-rate-limit';
 
 const router = express.Router();
 const avatarUpload = upload.single('image');
@@ -40,6 +50,17 @@ router.get('/logout', passportJWT, logout);
 
 router.post('/signup', avatarUpload, signupErrorHandler, signup);
 
-router.get('/verify-email', verifyEmail);
+router.get('/verify-email/:token', verifyEmail);
+
+router.patch('/update-password', passportJWT, updatePassword);
+
+const emailSendingRateLimit = rateLimit({
+  windowMs: 12 * 60 * 60 * 1000, // 12h
+  max: 5,
+});
+
+router.post('/request/reset-password', emailSendingRateLimit, requestPasswordReset);
+
+router.post('/request/verification-email', emailSendingRateLimit, requestEmailVerification);
 
 export default router;

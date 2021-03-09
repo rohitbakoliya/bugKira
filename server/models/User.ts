@@ -1,6 +1,6 @@
-import Joi, { ValidationResult } from 'joi';
 import mongoose, { Document } from 'mongoose';
 import bcrypt from 'bcryptjs';
+import { EXPIRATION_TIME } from '../config';
 
 type Provider = 'google' | 'local';
 export interface IUser extends Document {
@@ -15,6 +15,7 @@ export interface IUser extends Document {
   isVerified: boolean;
   provider: Array<Provider>;
   googleId: string;
+  [x: string]: any;
 }
 
 export const UserSchema = new mongoose.Schema<IUser>(
@@ -99,6 +100,16 @@ UserSchema.pre('save', function (next) {
   }
 });
 
+UserSchema.index(
+  { createdAt: 1 },
+  {
+    expireAfterSeconds: EXPIRATION_TIME.NOT_VERIFIED_USER,
+    partialFilterExpression: {
+      isVerified: false,
+    },
+  }
+);
+
 UserSchema.methods.isValidPassword = async function (password) {
   try {
     // Check/Compares password
@@ -111,46 +122,3 @@ UserSchema.methods.isValidPassword = async function (password) {
 
 // create the model
 export const User = mongoose.model<IUser>('User', UserSchema);
-
-// input validation
-export const validateUserSignup = (user: any): ValidationResult => {
-  const SignupSchema = Joi.object({
-    // name: Joi.string().required().min(2).max(50).trim(),
-    username: Joi.string()
-      .required()
-      .pattern(/(^[A-Za-z0-9]+(_|.)?[A-Za-z0-9]+$)/, 'Invalid username')
-      .min(4)
-      .max(50)
-      .trim(),
-    email: Joi.string().required().min(5).max(100).email({ minDomainSegments: 2 }).trim(),
-    password: Joi.string().required().min(6).max(50),
-    confirmPassword: Joi.string().required().min(6).max(50).valid(Joi.ref('password')),
-    avatar: Joi.string(),
-    createdAt: Joi.date().default(Date.now),
-  });
-  return SignupSchema.validate(user);
-};
-
-/**
- * @param user express user
- * @param hasEmail email is used for login
- */
-export const validateUserLogin = (user: any, hasEmail: boolean): ValidationResult => {
-  if (hasEmail) {
-    const emailSchema = Joi.object({
-      uoe: Joi.string().min(5).max(100).required().email({ minDomainSegments: 2 }),
-      password: Joi.string().min(6).max(100).required(),
-    });
-    return emailSchema.validate(user);
-  }
-  const usernameSchema = Joi.object({
-    uoe: Joi.string()
-      .required()
-      .pattern(/(^[A-Za-z0-9]+(_|.)?[A-Za-z0-9]+$)/, 'Invalid username')
-      .min(4)
-      .max(50)
-      .trim(),
-    password: Joi.string().min(6).max(100).required(),
-  });
-  return usernameSchema.validate(user);
-};

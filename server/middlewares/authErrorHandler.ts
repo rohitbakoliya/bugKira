@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { validateUserSignup, User } from '../models/User';
+import { User } from '../models/User';
+import { validateUserSignup } from '../validators/User.validators';
 import httpStatus from 'http-status-codes';
 
 export const signupErrorHandler = async (req: Request, res: Response, next: NextFunction) => {
