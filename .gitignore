@@ -130,3 +130,6 @@ dist
 # server build output
 dist
 build
+
+# todo lists
+*todo*

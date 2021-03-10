@@ -11,7 +11,9 @@ export const SIGNUP = ApiActionCreator('user/SIGN_UP');
 export const LOGIN = ApiActionCreator('user/LOGIN');
 export const LOGOUT = ApiActionCreator('user/LOGOUT');
 export const CHECK_AUTH = ApiActionCreator('auth/CHECK_AUTH');
-
+export const RESET_PASSWORD = ApiActionCreator('user/RESET_PASSWORD');
+export const REQ_RESET_PASSWORD = ApiActionCreator('user/REQ_RESET_PASSWORD');
+export const REQ_VERIFICATION_EMAIL = ApiActionCreator('user/REQ_VERIFICATION_EMAIL');
 export interface UserProps {
   username?: string;
   name?: string;
@@ -110,9 +112,48 @@ export const logoutUser = (): ApiAction => ({
   onRequest: LOGOUT.REQUEST,
   onSuccess: (dispatch, data) => {
     dispatch({ type: LOGOUT.SUCCESS, payload: data });
-    dispatch(push('/'));
+    dispatch(push('/', null));
   },
   onFailure: (dispatch, err) => {
     dispatch({ type: LOGOUT.FAILURE, payload: err });
   },
+});
+
+export const resetPassword = (
+  formData: { password: string; confirmPassword: string },
+  token: string
+): ApiAction => ({
+  type: API,
+  payload: {
+    method: 'PATCH',
+    url: `/api/user/auth/reset-password/${token}`,
+    formData,
+  },
+  onRequest: RESET_PASSWORD.REQUEST,
+  onSuccess: RESET_PASSWORD.SUCCESS,
+  onFailure: RESET_PASSWORD.FAILURE,
+});
+
+export const resetPasswordRequest = (formData: { email: string }): ApiAction => ({
+  type: API,
+  payload: {
+    method: 'POST',
+    url: `/api/user/auth/request/reset-password`,
+    formData,
+  },
+  onRequest: REQ_RESET_PASSWORD.REQUEST,
+  onSuccess: REQ_RESET_PASSWORD.SUCCESS,
+  onFailure: REQ_RESET_PASSWORD.FAILURE,
+});
+
+export const requestEmailVerification = (formData: { email: string }): ApiAction => ({
+  type: API,
+  payload: {
+    method: 'POST',
+    url: `/api/user/auth/request/verification-email`,
+    formData,
+  },
+  onRequest: REQ_VERIFICATION_EMAIL.REQUEST,
+  onSuccess: REQ_VERIFICATION_EMAIL.SUCCESS,
+  onFailure: REQ_VERIFICATION_EMAIL.FAILURE,
 });

@@ -40,7 +40,7 @@ const Login: React.FC = () => {
             type='text'
             name='uoe'
             placeholder='use email or username'
-            icon='envelope'
+            icon='user'
             autoComplete='username'
             errors={errors}
             inputRef={register}

@@ -72,8 +72,8 @@ export const sendPasswordChangeMail = async ({ user }: ISendEmail): Promise<any>
     if (!token) throw new Error(`Something went wrong while sending password reset email`);
 
     // create password reset link
-    const resetPasswordLink = `${CLIENT_URL}/api/user/auth/passwordreset/${token.token}`;
-    const restoreVerificationLink = `${CLIENT_URL}/forgot-password`;
+    const resetPasswordLink = `${CLIENT_URL}/reset-password/${token.token}`;
+    const restoreVerificationLink = `${CLIENT_URL}/request/forgot-password`;
 
     const msg = {
       to: user.email,

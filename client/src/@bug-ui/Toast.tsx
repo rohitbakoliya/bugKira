@@ -32,6 +32,7 @@ export const Toast: React.FC<Props> = ({ icon, styles, position, reverseOrder })
         primary: theme.colors.green,
         secondary: theme.colors.greenlight,
       },
+      duration: 3500,
     },
     error: {
       style: {
@@ -43,6 +44,7 @@ export const Toast: React.FC<Props> = ({ icon, styles, position, reverseOrder })
         primary: theme.colors.red,
         secondary: theme.colors.redlight,
       },
+      duration: 5500,
     },
     loading: {
       style: {

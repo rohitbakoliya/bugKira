@@ -59,7 +59,7 @@ export const ApiMiddleware = ({ getState, dispatch }: apiProps) => (next: any) =
     } else {
       dispatch({ type: onFailure, payload: err || 'Something went wrong' });
     }
-    return Promise.reject(err);
+    return Promise.reject(err || 'Something went wrong');
   }
 };
 export default ApiMiddleware;

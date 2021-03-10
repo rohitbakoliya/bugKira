@@ -8,6 +8,7 @@ import {
   logout,
   requestEmailVerification,
   requestPasswordReset,
+  resetPassword,
   signup,
   updatePassword,
   verifyEmail,
@@ -51,6 +52,8 @@ router.get('/logout', passportJWT, logout);
 router.post('/signup', avatarUpload, signupErrorHandler, signup);
 
 router.get('/verify-email/:token', verifyEmail);
+
+router.patch('/reset-password/:token', resetPassword);
 
 router.patch('/update-password', passportJWT, updatePassword);
 

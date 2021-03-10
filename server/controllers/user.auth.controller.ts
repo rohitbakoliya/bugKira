@@ -261,11 +261,15 @@ export const resetPassword = async (req: Request, res: Response) => {
   try {
     const verificationToken = req.params.token as string;
     if (!verificationToken)
-      return res.status(httpStatus.BAD_REQUEST).json({ error: `Password reset link is broken` });
+      return res
+        .status(httpStatus.BAD_REQUEST)
+        .json({ error: `Unable to find verification token` });
     // finding token
     const token = await PasswordToken.findOne({ token: verificationToken });
     if (!token)
-      return res.status(httpStatus.NOT_FOUND).json({ error: 'Unable to find verification token' });
+      return res
+        .status(httpStatus.BAD_REQUEST)
+        .json({ error: 'Password reset link is either expired or invalid' });
 
     // find user corrosponding to token
     const user = await User.findOne({ _id: token._userId });
@@ -281,7 +285,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     // if all good then update current password to new one
     user.password = password;
     await user.save();
-
+    await token.delete();
     return res.status(httpStatus.OK).json({ data: 'Password updated successfully' });
   } catch (err) {
     return res
