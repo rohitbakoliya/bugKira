@@ -28,8 +28,7 @@ const MainRouter: React.FC = () => (
       <RestrictedRoute path='/request/verification-email' component={VerifyEmailHome} />
 
       {/* Private Routes */}
-      <PrivateRoute path='/dashboard' component={Dashboard} />
-
+      <PrivateRoute path='/' component={Dashboard} />
       {/* Private Routes */}
       <PublicRoute component={() => <div>404, page not found!</div>} />
     </Switch>

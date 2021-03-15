@@ -7,7 +7,7 @@ const colors = {
   accent: '#E5E9FF',
   offwhite: '#EAEEFF',
   white: '#FBFBFF',
-  black: '#3D3C47',
+  black: '#24292E',
   gray: '#A5ADC6',
   green: '#25B93E',
   greenlight: '#CEFDD7',

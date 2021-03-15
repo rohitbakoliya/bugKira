@@ -178,7 +178,7 @@ export const getRawAvatarImageByUsername = async (req: Request, res: Response) =
 
                 // resizing profile picture using sharp
                 sharp(buffer)
-                  .resize(size)
+                  .resize(size, size)
                   .jpeg({ quality: 100 })
                   .toBuffer((err, resizedBuffer) => {
                     try {

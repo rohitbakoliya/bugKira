@@ -17,15 +17,17 @@ export const Flex = styled.div<Props>`
   justify-content: ${props => props.justify};
   align-items: ${props => props.align};
   flex-wrap: ${props => (props.nowrap ? 'no-wrap' : 'wrap')};
-  & > *::not(::last-child) {
-    ${({ gap = 'none', direction }) =>
-      direction === 'column'
-        ? css`
-            margin-bottom: ${p => p.theme.space[gap]}px;
-          `
-        : css`
-            margin-right: ${p => p.theme.space[gap]}px;
-          `}
+  & > *:not(:last-child) {
+    ${({ gap, direction }) =>
+      gap
+        ? direction === 'column'
+          ? css`
+              margin-bottom: ${p => p.theme.space[gap]}px;
+            `
+          : css`
+              margin-right: ${p => p.theme.space[gap]}px;
+            `
+        : null}
   }
 `;
 
