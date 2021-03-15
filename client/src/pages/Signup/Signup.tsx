@@ -12,6 +12,7 @@ import SignupSchema from './SignupSchema';
 import SignupWrapper from '../Login/Login.style';
 import { StoreState } from 'store';
 import { signupUser } from 'store/ducks';
+import { Link } from 'react-router-dom';
 
 interface PreviewFile extends File {
   preview?: any;
@@ -110,6 +111,9 @@ const Signup: React.FC = () => {
         <IconLink to='/' endIcon='arrow-right' className='color--gray'>
           Already have an account?
         </IconLink>
+        <Link className='color--gray link-sm' to='request/verification-email'>
+          Already registered, but have not received a confirmation email?
+        </Link>
       </Flex>
     </SignupWrapper>
   );

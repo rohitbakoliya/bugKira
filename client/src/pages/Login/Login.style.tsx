@@ -14,6 +14,19 @@ const LoginWrapper = styled.div`
     align-items: center;
     justify-content: center;
     width: 300px;
+    .util--links {
+      width: 100%;
+      text-align: right;
+      a {
+        font-size: 14px;
+      }
+    }
+  }
+
+  a.link-sm {
+    font-size: 14px;
+    margin: 30px 5px 0 5px;
+    text-align: center;
   }
 `;
 

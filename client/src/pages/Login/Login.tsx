@@ -11,6 +11,7 @@ import LoginSchema from './LoginSchema';
 import LoginWrapper from './Login.style';
 import GoogleButton from 'components/GoogleButton';
 import AppLogo from 'components/Logo';
+import { Link } from 'react-router-dom';
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
@@ -53,6 +54,11 @@ const Login: React.FC = () => {
             errors={errors}
             inputRef={register}
           />
+          <div className='util--links'>
+            <Link className='color--gray' to='/request/forgot-password'>
+              Forgot password?
+            </Link>
+          </div>
           <Button isLoading={isLoading as boolean} icon='arrow-right' type='submit' width='50%'>
             Login
           </Button>
