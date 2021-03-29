@@ -18,6 +18,37 @@ export interface IUser extends Document {
   [x: string]: any;
 }
 
+export interface IUserInfo extends Document {
+  username: string;
+  name: string;
+}
+
+export const UserInfoSchema = new mongoose.Schema<IUserInfo>({
+  name: {
+    type: String,
+    // required: true,
+    trim: true,
+    minLength: 2,
+    maxLength: 100,
+  },
+  username: {
+    type: String,
+    required: true,
+    trim: true,
+    minLength: 4,
+    maxLength: 50,
+    unique: true,
+  },
+});
+
+UserInfoSchema.set('toJSON', {
+  transform: function (_doc: any, ret: any) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+  },
+});
+
 export const UserSchema = new mongoose.Schema<IUser>(
   {
     name: {
