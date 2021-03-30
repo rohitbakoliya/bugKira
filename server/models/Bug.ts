@@ -20,24 +20,19 @@ const ActivitiesSchema = new mongoose.Schema(
   { _id: false }
 );
 
-enum Elabels {
-  'bug',
-  'feature',
-  'help wanted',
-  'enhancement',
-}
+export type TLabels = 'bug' | 'feature' | 'help wanted' | 'enhancement';
 
 export interface IBug extends Document {
   title: string;
   body: string;
   dateOpened: Date;
-  labels: Elabels;
+  labels: Array<TLabels>;
   author: any;
   isOpen: boolean;
   activities: Array<any>;
   comments: Array<any>;
   reactions: Array<any>;
-  [x: string]: any;
+  // [x: string]: any; // this is causing some error in `$pull` for labels
 }
 
 const BugSchema = new mongoose.Schema<IBug>({
