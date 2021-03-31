@@ -65,7 +65,6 @@ export const getBugById = async (req: Request, res: Response) => {
  * @route   POST /api/bugs/
  * @access  private
  */
-// ! error because of name i.e not required
 export const createBug = async (req: Request, res: Response) => {
   const user = req.user as IUser;
   const { error, value } = validateBug(req.body);
@@ -147,7 +146,7 @@ export const addLabels = async (req: Request, res: Response) => {
   } catch (err) {
     return res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ error: `error: 'Something went wrong while adding new label',` });
+      .json({ error: 'Something went wrong while adding new label' });
   }
 };
 

@@ -26,9 +26,9 @@ export interface IUserInfo extends Document {
 export const UserInfoSchema = new mongoose.Schema<IUserInfo>({
   name: {
     type: String,
-    // required: true,
+    required: true,
     trim: true,
-    minLength: 2,
+    minLength: 4,
     maxLength: 100,
   },
   username: {
@@ -52,9 +52,9 @@ export const UserSchema = new mongoose.Schema<IUser>(
   {
     name: {
       type: String,
-      // required: true,
+      required: true,
       trim: true,
-      minLength: 2,
+      minLength: 4,
       maxLength: 100,
     },
     username: {

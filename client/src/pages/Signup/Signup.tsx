@@ -69,8 +69,8 @@ const Signup: React.FC = () => {
             errors={errors}
             inputRef={register}
           />
-          {/* 
-          // ? name is not required for now
+
+          {/* ? name is required now */}
           <Input
             icon='user'
             placeholder='full name'
@@ -78,7 +78,7 @@ const Signup: React.FC = () => {
             name='name'
             errors={errors}
             inputRef={register}
-          /> */}
+          />
           <Input
             icon='envelope'
             placeholder='email@example.com'

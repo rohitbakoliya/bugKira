@@ -14,7 +14,7 @@ export const emailValidator = Joi.string()
   .email({ minDomainSegments: 2 })
   .trim();
 
-export const nameValidator = Joi.string().required().min(2).max(50).trim();
+export const nameValidator = Joi.string().required().min(4).max(50).trim();
 
 export const passwordValidator = Joi.string().required().min(6).max(50);
 
@@ -25,7 +25,7 @@ export const bioValidator = Joi.string().required().min(1).max(200).trim();
  */
 export const validateUserSignup = (user: any): ValidationResult => {
   const SignupSchema = Joi.object({
-    // name: nameValidator,
+    name: nameValidator,
     username: usernameValidator,
     email: emailValidator,
     password: passwordValidator,
