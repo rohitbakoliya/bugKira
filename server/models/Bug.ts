@@ -32,7 +32,7 @@ export interface IBug extends Document {
   activities: Array<any>;
   comments: Array<any>;
   reactions: Array<any>;
-  // [x: string]: any; // this is causing some error in `$pull` for labels
+  // [x: string]: any; //! this is causing some error in `$pull` for labels
 }
 
 const BugSchema = new mongoose.Schema<IBug>({
@@ -56,7 +56,7 @@ const BugSchema = new mongoose.Schema<IBug>({
     type: [String],
     enum: VALID_LABELS,
   },
-  autor: {
+  author: {
     type: UserInfoSchema,
     required: true,
   },
@@ -82,5 +82,5 @@ BugSchema.plugin(autoIncrement.plugin, {
 });
 
 // create a model
-const Bug = mongoose.model<IBug>('Bug', BugSchema);
+const Bug = mongoose.model<IBug>('Bug', BugSchema, 'bugs');
 export default Bug;

@@ -2,8 +2,12 @@ import Joi, { ValidationResult } from 'joi';
 
 export const JoiLabelSchema = Joi.array().items(Joi.string().min(2).max(50));
 
+export const validateLabels = (labels: Array<string>) => {
+  return JoiLabelSchema.validate(labels);
+};
+
 export const validateLabel = (label: string) => {
-  return JoiLabelSchema.validate(label);
+  return Joi.string().min(2).max(50).validate(label);
 };
 
 export const JoiReferencesSchema = Joi.object({
@@ -19,7 +23,7 @@ export const validateBug = (bug: any): ValidationResult => {
   const schema = Joi.object({
     title: Joi.string().min(6).max(100).required(),
     body: Joi.string().min(6).max(1000).required(),
-    date_opened: Joi.date().default(Date.now),
+    dateOpened: Joi.date().default(Date.now),
     author: Joi.object(),
     isOpen: Joi.bool().default(true),
   });

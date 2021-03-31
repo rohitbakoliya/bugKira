@@ -24,9 +24,9 @@ router.get('/:bugId', getBugById);
 router.patch('/:bugId', updateBug);
 
 // bug labels
-router.patch('/:bugId/labels/new', addLabels);
 router.patch('/:bugId/labels', updateLabels);
-router.delete('/:bugId/lables/:name', deleteLabel);
+router.patch('/:bugId/labels/:name', addLabels);
+router.delete('/:bugId/labels/:name', deleteLabel);
 
 // bug status update
 router.patch('/:bugId/close', toggleBugStatus({ status: false }));

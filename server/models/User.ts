@@ -37,7 +37,6 @@ export const UserInfoSchema = new mongoose.Schema<IUserInfo>({
     trim: true,
     minLength: 4,
     maxLength: 50,
-    unique: true,
   },
 });
 

@@ -4,7 +4,7 @@ import httpStatus from 'http-status-codes';
 import Joi from 'joi';
 import Bug, { TLabels } from '../models/Bug';
 import { IUser } from '../models/User';
-import { validateBug, validateLabel } from '../validators/Bug.validators';
+import { validateBug, validateLabels } from '../validators/Bug.validators';
 
 /**
  * @desc    get all bugs
@@ -49,7 +49,7 @@ export const getSuggestions = async (_req: Request, res: Response) => {
 export const getBugById = async (req: Request, res: Response) => {
   const bugId = req.params.bugId;
   try {
-    const bug = await Bug.findById(bugId)
+    const bug = await Bug.findOne({ bugId })
       .populate('reactions.users', 'name username')
       .populate('comments.reactions.users', 'name username');
     if (!bug) return res.status(httpStatus.NOT_FOUND).json({ error: `Bug#${bugId} Not Found` });
@@ -65,10 +65,9 @@ export const getBugById = async (req: Request, res: Response) => {
  * @route   POST /api/bugs/
  * @access  private
  */
+// ! error because of name i.e not required
 export const createBug = async (req: Request, res: Response) => {
   const user = req.user as IUser;
-  // TODO: remove log
-  console.log(user);
   const { error, value } = validateBug(req.body);
   if (error) {
     return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: error.details[0].message });
@@ -83,6 +82,7 @@ export const createBug = async (req: Request, res: Response) => {
     const savedBug = await bug.save();
     return res.status(httpStatus.CREATED).json({ data: savedBug });
   } catch (err) {
+    console.log(err);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: `something went wrong` });
   }
 };
@@ -125,20 +125,17 @@ export const updateBug = async (req: Request, res: Response) => {
 
 /**
  * @desc    to add a new labels
- * @route   PATCH /api/bugs/:bugId/labels/new
+ * @route   PATCH /api/bugs/:bugId/labels/:name
  * @access  private
  */
 export const addLabels = async (req: Request, res: Response) => {
   const bugId = req.params.bugId;
-  const { error, value } = validateLabel(req.body);
-  if (error) {
-    return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: error.details[0].message });
-  }
+  const labelName = req.params.name as TLabels;
 
   try {
     const bug = await Bug.findOneAndUpdate(
       { bugId },
-      { $addToSet: { labels: value } },
+      { $addToSet: { labels: labelName } },
       { new: true, runValidators: true }
     );
 
@@ -164,11 +161,10 @@ export const deleteLabel = async (req: Request, res: Response) => {
   const labelName = req.params.name as TLabels;
 
   try {
-    // TODO: testing required => https://docs.mongodb.com/manual/reference/operator/update/pull/#pull
     const bug = await Bug.findOneAndUpdate(
       { bugId },
-      { $pull: { labels: { $eq: labelName } } },
-      { new: true, runValidators: true }
+      { $pull: { labels: labelName } },
+      { new: true, runValidators: true, useFindAndModify: false }
     );
 
     if (!bug) {
@@ -188,8 +184,7 @@ export const deleteLabel = async (req: Request, res: Response) => {
  */
 export const updateLabels = async (req: Request, res: Response) => {
   const bugId = req.params.bugId;
-  const { error, value } = validateLabel(req.body.labels);
-
+  const { error, value } = validateLabels(req.body.labels);
   if (error) {
     return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: error.details[0].message });
   }
@@ -198,7 +193,7 @@ export const updateLabels = async (req: Request, res: Response) => {
     const bug = await Bug.findOneAndUpdate(
       { bugId },
       { $set: { labels: value } },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true, useFindAndModify: false }
     );
     if (!bug) {
       return res.status(httpStatus.NOT_FOUND).json({ error: `Bug#${bugId} Not Found` });
@@ -312,6 +307,7 @@ export const addOrRemoveReaction = async (req: Request, res: Response) => {
 
     return res.status(httpStatus.OK).json({ data: savedBug.reactions });
   } catch (err) {
+    console.log(err);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: `something went wrong` });
   }
 };
