@@ -229,11 +229,9 @@ export const getAllReactionsByCid = async (req: Request, res: Response) => {
     // .populate('comments.reactions.users', 'name username');
 
     if (!bug) return res.status(httpStatus.NOT_FOUND).json({ error: `Bug#${bugId} Not Found` });
-    console.log(bug);
     // TODO: return res based upon need
     return res.status(httpStatus.OK).json({ data: bug.comments[0].reactions });
   } catch (err) {
-    console.log(err);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       error: `Something went wrong while fetching reaction`,
     });

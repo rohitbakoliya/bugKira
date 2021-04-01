@@ -20,7 +20,7 @@ export const checkAuth = (req: Request, res: Response) => {
 
 /**
  * @desc    to logout current user
- * @route   GET /api/auth/user/logout
+ * @route   GET /api/user/auth/logout
  * @access  private
  */
 export const logout = (req: Request, res: Response) => {
@@ -30,7 +30,7 @@ export const logout = (req: Request, res: Response) => {
 
 /**
  * @desc    to signup user
- * @route   POST /api/auth/user/signup
+ * @route   POST /api/user/auth/signup
  * @access  public
  */
 export const signup = async (req: Request, res: Response) => {
