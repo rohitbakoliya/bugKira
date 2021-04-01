@@ -219,9 +219,18 @@ export const toggleBugStatus = ({ status }: { status: boolean }) => async (
   const bugId = req.params.bugId;
   try {
     const bug = await Bug.findOneAndUpdate(
-      { bugId },
-      { isOpen: status },
-      { new: true, runValidators: true }
+      { bugId, isOpen: !status },
+      {
+        isOpen: status,
+        // add this event in activities
+        $push: {
+          activities: {
+            author: req.user,
+            action: status ? 'opened' : 'closed',
+          },
+        },
+      },
+      { new: true, runValidators: true, useFindAndModify: false }
     );
 
     if (!bug) {
@@ -306,7 +315,13 @@ export const addOrRemoveReaction = async (req: Request, res: Response) => {
 
     return res.status(httpStatus.OK).json({ data: savedBug.reactions });
   } catch (err) {
-    console.log(err);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: `something went wrong` });
   }
 };
+
+/**
+ * TODO: create timeline endpoint
+ * @desc    to get complete timeline of a bug with bugId
+ * @route   GET /api/bugs/:bugId/timeline
+ * @access  private
+ */
