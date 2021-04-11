@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status-codes';
 import jwt from 'jsonwebtoken';
-import { CLIENT_URL } from '../config';
 import { IUser } from '../models/User';
 
 export const generateToken = (req: Request, res: Response) => {
@@ -37,7 +36,11 @@ const OAuthSuccessPage = `
     <p>Successfully Authorized!</p>
     <script>
       window.onload = window.close();
-      window.opener.postMessage('success', '${CLIENT_URL}');
+        let originUrl = window.location.origin;
+        if (window.location.hostname === 'localhost') {
+          originUrl = 'http://localhost:3000'
+        }
+      window.opener.postMessage('success', originUrl);
     </script>
   </body>
 </html>`;
