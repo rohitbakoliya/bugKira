@@ -35,7 +35,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "cross-env INLINE_RUNTIME_CHUNK=false react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -67,7 +67,6 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/redux-logger": "^3.0.8",
     "@types/styled-components": "^5.1.7",
-    "@types/yup": "^0.29.11",
-    "cross-env": "^7.0.3"
+    "@types/yup": "^0.29.11"
   }
 }

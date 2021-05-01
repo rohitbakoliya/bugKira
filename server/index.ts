@@ -28,30 +28,11 @@ const app: Application = express();
 app.set('env', process.env.NODE_ENV);
 
 // middlewares
-if (app.get('env') === 'production') {
-  app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: {
-          ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-          'img-src': ["'self'", 'blob:', 'data:'],
-        },
-      },
-    })
-  ); // security headers
-} else {
-  app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: {
-          ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-          // since server is running on different PORT
-          'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-        },
-      },
-    })
-  );
-}
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 app.use(cors({ credentials: true }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
