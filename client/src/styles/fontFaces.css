@@ -16,14 +16,16 @@
   font-family: 'Product Sans Light Regular';
   font-style: normal;
   font-weight: normal;
-  src: local('Product Sans Light Regular'), url('../assets/fonts/ProductSans-Light.woff') format('woff');
+  src: local('Product Sans Light Regular'),
+    url('../assets/fonts/ProductSans-Light.woff') format('woff');
 }
 
 @font-face {
   font-family: 'Product Sans Medium Regular';
   font-style: normal;
   font-weight: normal;
-  src: local('Product Sans Medium Regular'), url('../assets/fonts/ProductSans-Medium.woff') format('woff');
+  src: local('Product Sans Medium Regular'),
+    url('../assets/fonts/ProductSans-Medium.woff') format('woff');
 }
 
 @font-face {

@@ -95,13 +95,13 @@ const PrimaryLoaderWrapper = styled.div`
 
 const PrimaryLoader: React.FC = () => (
   <PrimaryLoaderWrapper>
-    <div className='spinner-'>
-      <div className='spinner--dot'></div>
-      <div className='spinner--dot'></div>
-      <div className='spinner--dot'></div>
-      <div className='spinner--dot'></div>
-      <div className='spinner--dot'></div>
-      <div className='spinner--dot'></div>
+    <div className="spinner-">
+      <div className="spinner--dot"></div>
+      <div className="spinner--dot"></div>
+      <div className="spinner--dot"></div>
+      <div className="spinner--dot"></div>
+      <div className="spinner--dot"></div>
+      <div className="spinner--dot"></div>
     </div>
   </PrimaryLoaderWrapper>
 );
@@ -149,18 +149,16 @@ const SecondaryLoaderWrapper = styled.div`
 `;
 const SecondaryLoader: React.FC = () => (
   <SecondaryLoaderWrapper>
-    <div className='half-circle-spinner'>
-      <div className='circle circle-1'></div>
-      <div className='circle circle-2'></div>
+    <div className="half-circle-spinner">
+      <div className="circle circle-1"></div>
+      <div className="circle circle-2"></div>
     </div>
   </SecondaryLoaderWrapper>
 );
 
-const Loading: React.FC<Props> = ({ varient = 'primary' }) => {
+export const Loading: React.FC<Props> = ({ varient = 'primary' }) => {
   if (varient === 'primary') {
     return <PrimaryLoader />;
   }
   return <SecondaryLoader />;
 };
-
-export default Loading;

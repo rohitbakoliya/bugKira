@@ -65,13 +65,13 @@ const AvatarUploader: React.FC<Props> = ({
   );
   return (
     <AvatarUploaderWrapper>
-      <Flex justify='center' align='center' direction='column'>
+      <Flex justify="center" align="center" direction="column">
         <AvatarContainer size={size} indicateError={error ? true : false}>
           <div {...getRootProps({ className: 'dropzone' })}>
             {/* 
              // * input element already have ref from react-dropzone
             */}
-            <input type='file' name={name} {...getInputProps()} />
+            <input type="file" name={name} {...getInputProps()} />
             <p>Change Avatar</p>
           </div>
           <img src={file ? file.preview : avatarDefault} alt={file ? 'avatar' : 'default avatar'} />

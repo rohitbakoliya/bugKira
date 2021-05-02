@@ -26,10 +26,10 @@ const Navbar: React.FC<Props> = ({ handleSidebar, isOpen }) => {
   return (
     <NavbarWrapper>
       <FontAwesomeIcon
-        className='hamburger--icon'
+        className="hamburger--icon"
         icon={isOpen ? 'times' : 'bars'}
         onClick={handleSidebar}
-        size='2x'
+        size="2x"
       />
     </NavbarWrapper>
   );

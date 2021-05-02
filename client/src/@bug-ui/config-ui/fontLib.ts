@@ -8,12 +8,14 @@ import {
   faCheckCircle,
   faEdit,
   faEnvelope,
+  faExclamation,
   faExclamationCircle,
   faHome,
   faInfoCircle,
   faKey,
   faLock,
   faPaperPlane,
+  faPlus,
   faSignOutAlt,
   faSpinner,
   faTimes,
@@ -40,5 +42,7 @@ library.add(
   faBars,
   faTimes,
   faHome,
-  faBell
+  faBell,
+  faPlus,
+  faExclamation
 );

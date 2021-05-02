@@ -8,6 +8,10 @@ const LoginWrapper = styled.div`
   h2 {
     margin-bottom: ${p => p.theme.spacings.my};
   }
+  .logo {
+    width: 100px;
+    margin: 5px 0;
+  }
   form {
     display: flex;
     flex-direction: column;

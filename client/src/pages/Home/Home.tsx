@@ -6,9 +6,9 @@ interface Props {
 }
 const Home: React.FC<Props> = ({ right: RightComponent }) => {
   return (
-    <HomeWrapper as='section'>
-      <div className='home__left'></div>
-      <div className='home__right'>
+    <HomeWrapper as="section">
+      <div className="home__left"></div>
+      <div className="home__right">
         <RightComponent />
       </div>
     </HomeWrapper>

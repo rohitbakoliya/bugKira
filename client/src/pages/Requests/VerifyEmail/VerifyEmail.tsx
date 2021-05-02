@@ -29,7 +29,7 @@ const VerifyEmail: React.FC = () => {
   };
   return (
     <RequestFormWrapper>
-      <Flex align='center' justify='center' direction='column'>
+      <Flex align="center" justify="center" direction="column">
         <h2>Haven't received verification email or link was expried??</h2>
         <p>
           Don't worries, you can generate new verification link by providing your registed email
@@ -39,18 +39,18 @@ const VerifyEmail: React.FC = () => {
         <br />
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input
-            name='email'
-            type='email'
-            icon='envelope'
-            placeholder='email@example.com'
+            name="email"
+            type="email"
+            icon="envelope"
+            placeholder="email@example.com"
             errors={errors}
             inputRef={register}
           />
-          <Button isLoading={isLoading as boolean} type='submit' icon='paper-plane'>
+          <Button isLoading={isLoading as boolean} type="submit" icon="paper-plane">
             Send verification email
           </Button>
         </form>
-        <IconLink to='/' endIcon='arrow-right' className='color--gray'>
+        <IconLink to="/" endIcon="arrow-right" className="color--gray">
           Go back to login
         </IconLink>
       </Flex>

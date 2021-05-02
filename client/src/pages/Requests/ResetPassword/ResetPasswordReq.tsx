@@ -29,7 +29,7 @@ const ResetPasswordReq: React.FC = () => {
   };
   return (
     <RequestFormWrapper>
-      <Flex align='center' justify='center' direction='column'>
+      <Flex align="center" justify="center" direction="column">
         <h2>Ohhh! You fogot your password</h2>
         <p>
           No worries, you can reset your password by providing your registed email below. <br />{' '}
@@ -39,18 +39,18 @@ const ResetPasswordReq: React.FC = () => {
         <br />
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input
-            name='email'
-            type='email'
-            icon='envelope'
-            placeholder='email@example.com'
+            name="email"
+            type="email"
+            icon="envelope"
+            placeholder="email@example.com"
             errors={errors}
             inputRef={register}
           />
-          <Button isLoading={isLoading as boolean} type='submit' icon='paper-plane'>
+          <Button isLoading={isLoading as boolean} type="submit" icon="paper-plane">
             Send password reset link
           </Button>
         </form>
-        <IconLink to='/' endIcon='arrow-right' className='color--gray'>
+        <IconLink to="/" endIcon="arrow-right" className="color--gray">
           Go back to login
         </IconLink>
       </Flex>

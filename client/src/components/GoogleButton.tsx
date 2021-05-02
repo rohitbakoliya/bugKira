@@ -49,7 +49,7 @@ const GoogleButton: React.FC<Props> = props => {
 
   return (
     <StyledGB onClick={initOAuthWindow} {...props}>
-      <img src={googleLogo} alt='google logo' /> Continue with Google
+      <img src={googleLogo} alt="google logo" /> Continue with Google
     </StyledGB>
   );
 };

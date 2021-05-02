@@ -40,7 +40,7 @@ export const IconLink: React.FC<Props> = ({
   if (circleIcon) {
     return (
       <INavLink {...rest}>
-        {startIcon && <CircleIcon className='start--icon' size='28px' icon={startIcon} />}
+        {startIcon && <CircleIcon className="start--icon" size="28px" icon={startIcon} />}
         {children}
         {endIcon && <CircleIcon icon={endIcon} />}
       </INavLink>
@@ -48,7 +48,7 @@ export const IconLink: React.FC<Props> = ({
   }
   return (
     <INavLink {...rest}>
-      {startIcon && <FontAwesomeIcon className='start--icon' icon={startIcon} />}
+      {startIcon && <FontAwesomeIcon className="start--icon" icon={startIcon} />}
       {children}
       {endIcon && <FontAwesomeIcon icon={endIcon} />}
     </INavLink>

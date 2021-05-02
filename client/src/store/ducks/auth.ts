@@ -93,7 +93,7 @@ export const loginUser = (formData: { uoe: string; password: string }): ApiActio
   onSuccess: (dispatch, data) => {
     dispatch({ type: LOGIN.SUCCESS, payload: data });
     dispatch({ type: CLEAR_ALL_ERRORS });
-    dispatch(push('/dashboard'));
+    dispatch(push('/dashboard/bugs'));
   },
   onFailure: (dispatch, err) => {
     dispatch({ type: LOGIN.FAILURE, payload: err });

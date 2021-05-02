@@ -48,70 +48,70 @@ const Signup: React.FC = () => {
 
   return (
     <SignupWrapper>
-      <Flex direction='column' justify='center' align='center'>
+      <Flex direction="column" justify="center" align="center">
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* 
             // ? avatar is required for now
           */}
           <AvatarUploader
-            name='avatar'
+            name="avatar"
             file={file}
             handleFile={file => setFile(file)}
             handleError={err => setFileError(err)}
             fileError={fileError}
           />
           <InputLarge
-            icon='edit'
-            placeholder='Username'
-            type='text'
-            name='username'
-            autoComplete='off'
+            icon="edit"
+            placeholder="Username"
+            type="text"
+            name="username"
+            autoComplete="off"
             errors={errors}
             inputRef={register}
           />
 
           {/* ? name is required now */}
           <Input
-            icon='user'
-            placeholder='full name'
-            type='text'
-            name='name'
+            icon="user"
+            placeholder="full name"
+            type="text"
+            name="name"
             errors={errors}
             inputRef={register}
           />
           <Input
-            icon='envelope'
-            placeholder='email@example.com'
-            type='email'
-            name='email'
+            icon="envelope"
+            placeholder="email@example.com"
+            type="email"
+            name="email"
             errors={errors}
             inputRef={register}
           />
           <Input
-            icon='lock'
-            placeholder='password'
-            type='password'
-            name='password'
+            icon="lock"
+            placeholder="password"
+            type="password"
+            name="password"
             errors={errors}
             inputRef={register}
           />
           <Input
-            icon='lock'
-            placeholder='confim password'
-            type='password'
-            name='confirmPassword'
+            icon="lock"
+            placeholder="confim password"
+            type="password"
+            name="confirmPassword"
             errors={errors}
             inputRef={register}
           />
-          <Button isLoading={isLoading as boolean} type='submit' icon='arrow-right' width='50%'>
+          <Button isLoading={isLoading as boolean} type="submit" icon="arrow-right" width="50%">
             Signup
           </Button>
         </form>
         <GoogleButton />
-        <IconLink to='/' endIcon='arrow-right' className='color--gray'>
+        <IconLink to="/" endIcon="arrow-right" className="color--gray">
           Already have an account?
         </IconLink>
-        <Link className='color--gray link-sm' to='request/verification-email'>
+        <Link className="color--gray link-sm" to="request/verification-email">
           Already registered, but have not received a confirmation email?
         </Link>
       </Flex>

@@ -4,6 +4,7 @@ const GlobalStyles = createGlobalStyle`
   ${utils}
   * {
     box-sizing: border-box;
+    outline: none;
   }
   
   html, body {

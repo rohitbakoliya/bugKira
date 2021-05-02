@@ -58,7 +58,7 @@ export const Toast: React.FC<Props> = ({ icon, styles, position, reverseOrder })
       },
     },
     blank: {
-      icon: <FontAwesomeIcon icon='info-circle' />,
+      icon: <FontAwesomeIcon icon="info-circle" />,
       style: {
         ...stylesDefault,
         color: theme.colors.yellow,

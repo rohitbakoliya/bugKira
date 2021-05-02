@@ -33,32 +33,32 @@ const ResetPassword: React.FC = () => {
   };
   return (
     <RequestFormWrapper>
-      <Flex align='center' justify='center' direction='column'>
+      <Flex align="center" justify="center" direction="column">
         <h2>Here you go!</h2>
         <p>Please provide us, your new password</p>
         <br />
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input
-            name='password'
-            type='password'
-            icon='lock'
-            placeholder='New Password'
+            name="password"
+            type="password"
+            icon="lock"
+            placeholder="New Password"
             errors={errors}
             inputRef={register}
           />
           <Input
-            name='confirmPassword'
-            type='password'
-            icon='lock'
-            placeholder='New Confirm Password'
+            name="confirmPassword"
+            type="password"
+            icon="lock"
+            placeholder="New Confirm Password"
             errors={errors}
             inputRef={register}
           />
-          <Button isLoading={isLoading as boolean} type='submit' icon='key'>
+          <Button isLoading={isLoading as boolean} type="submit" icon="key">
             Update password
           </Button>
         </form>
-        <IconLink to='/' endIcon='arrow-right' className='color--gray'>
+        <IconLink to="/" endIcon="arrow-right" className="color--gray">
           Go back to login
         </IconLink>
       </Flex>

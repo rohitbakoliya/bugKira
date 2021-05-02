@@ -1,10 +1,12 @@
 import { Flex, IconLink } from '@bug-ui';
 import Avatar from '@bug-ui/Avatar';
+import AppLogo from 'components/Logo';
 import Navbar from 'components/Navbar/Navbar';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import { StoreState } from 'store';
 import { logoutUser } from 'store/ducks';
 import { SidebarWrapper, SidebarLinks } from './Sidebar.style';
@@ -41,46 +43,70 @@ const Sidebar: React.FC = React.memo(() => {
   return (
     <>
       <Navbar isOpen={isOpen} handleSidebar={handleOpen} />
-      <SidebarWrapper isOpen={isOpen} className='sidebar--wrapper'>
-        <div className='sidebar--sticky'>
-          <Flex align='center' className='dashboard__user'>
+      <SidebarWrapper isOpen={isOpen} className="sidebar--wrapper">
+        <Link to="/dashboard/bugs">
+          <AppLogo width="140px" />
+        </Link>
+        <div className="sidebar--sticky">
+          <Flex align="center" className="dashboard__user">
             <Avatar
-              className='dashboard__avatar'
+              className="dashboard__avatar"
               username={user?.username}
-              size='150'
-              height='auto'
-              width='100%'
+              size="130"
+              height="130px"
+              width="130px"
             />
-            <div className='dashboard__info'>
-              <h2 className='text--bold'>{user?.name}</h2>
-              <p className='color--gray'>@{user?.username}</p>
+            <div className="dashboard__info">
+              <h2 className="text--bold">{user?.name}</h2>
+              <p className="color--gray">@{user?.username}</p>
             </div>
           </Flex>
           <SidebarLinks>
-            <Flex gap='large' direction='column'>
-              <IconLink className='nav--link' circleIcon to='/dashboard' startIcon='home'>
+            <Flex gap="large" direction="column">
+              <IconLink
+                className="nav--link"
+                circleIcon
+                to="/dashboard/bugs"
+                startIcon="home"
+                activeClassName="active"
+              >
                 Dashboard
               </IconLink>
-              <IconLink className='nav--link' circleIcon to='/bugs' startIcon='user'>
+              <IconLink
+                className="nav--link"
+                circleIcon
+                to="/bugs"
+                startIcon="user"
+                activeClassName="active"
+              >
                 Bugs
               </IconLink>
               <IconLink
-                className='nav--link'
+                className="nav--link"
                 circleIcon
                 to={`/profile/${user?.username}`}
-                startIcon='user'
+                startIcon="user"
+                activeClassName="active"
               >
                 Profile
               </IconLink>
-              <IconLink className='nav--link' circleIcon to='/notification' startIcon='bell'>
+              <IconLink
+                className="nav--link"
+                circleIcon
+                to="/notification"
+                startIcon="bell"
+                activeClassName="active"
+              >
                 Notification
               </IconLink>
               <IconLink
-                className='nav--link'
+                className="nav--link"
                 circleIcon
-                startIcon='sign-out-alt'
-                to='#'
+                startIcon="sign-out-alt"
+                to="/"
+                exact
                 onClick={logout}
+                activeClassName="active"
               >
                 Logout
               </IconLink>

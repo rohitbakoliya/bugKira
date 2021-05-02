@@ -14,6 +14,7 @@ interface StyledButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 interface Props extends StyledButtonProps {
   icon?: any;
   isLoading?: boolean;
+  [x: string]: any;
 }
 
 const buttonSizes = {

@@ -21,14 +21,14 @@ const MainRouter: React.FC = () => (
   <BrowserRouter>
     <Switch>
       {/* Restricted Routes */}
-      <RestrictedRoute path='/' exact component={LoginHome} />
-      <RestrictedRoute path='/signup' component={SignupHome} />
-      <RestrictedRoute path='/reset-password/:token' component={ResetPasswordHome} />
-      <RestrictedRoute path='/request/forgot-password' component={ResetPasswordReqHome} />
-      <RestrictedRoute path='/request/verification-email' component={VerifyEmailHome} />
+      <RestrictedRoute path="/" exact component={LoginHome} />
+      <RestrictedRoute path="/signup" component={SignupHome} />
+      <RestrictedRoute path="/reset-password/:token" component={ResetPasswordHome} />
+      <RestrictedRoute path="/request/forgot-password" component={ResetPasswordReqHome} />
+      <RestrictedRoute path="/request/verification-email" component={VerifyEmailHome} />
 
       {/* Private Routes */}
-      <PrivateRoute path='/' component={Dashboard} />
+      <PrivateRoute path="/" component={Dashboard} />
       {/* Private Routes */}
       <PublicRoute component={() => <div>404, page not found!</div>} />
     </Switch>

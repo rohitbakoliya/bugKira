@@ -10,7 +10,7 @@ const PrivateRoute: React.FC<RouteProps> = ({ ...props }) => {
   return checkingAuthStatus ? (
     <></>
   ) : isAuthenticated ? (
-    <Redirect to={{ pathname: '/dashboard', state: { from: props.location } }} />
+    <Redirect to={{ pathname: '/dashboard/bugs', state: { from: props.location } }} />
   ) : (
     <Route {...props} />
   );

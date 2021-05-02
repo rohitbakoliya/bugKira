@@ -1,6 +1,6 @@
 import React, { CSSProperties, useState } from 'react';
 import styled from 'styled-components';
-import Loading from './Loading';
+import { Loading } from './Loading';
 
 interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
   username?: string;
@@ -43,7 +43,7 @@ const Avatar: React.FC<Props> = ({ username, size, ...rest }) => {
   return (
     <>
       <LoadingImage loader={loading} {...rest}>
-        <Loading varient='primary' />
+        <Loading varient="primary" />
       </LoadingImage>
       <AvatarImage
         src={`/api/user/${username}/avatar/raw?size=${size}`}

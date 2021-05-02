@@ -33,38 +33,38 @@ const Login: React.FC = () => {
   };
   return (
     <LoginWrapper>
-      <Flex direction='column' align='center' justify='center'>
-        <AppLogo width='50px' />
-        <h2 className='text--bold'>Hello, Welcome back!</h2>
+      <Flex direction="column" align="center" justify="center">
+        <AppLogo />
+        <h2 className="text--bold">Hello, Welcome back!</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input
-            type='text'
-            name='uoe'
-            placeholder='use email or username'
-            icon='user'
-            autoComplete='username'
+            type="text"
+            name="uoe"
+            placeholder="use email or username"
+            icon="user"
+            autoComplete="username"
             errors={errors}
             inputRef={register}
           />
           <Input
-            type='password'
-            name='password'
-            placeholder='password'
-            icon='lock'
+            type="password"
+            name="password"
+            placeholder="password"
+            icon="lock"
             errors={errors}
             inputRef={register}
           />
-          <div className='util--links'>
-            <Link className='color--gray' to='/request/forgot-password'>
+          <div className="util--links">
+            <Link className="color--gray" to="/request/forgot-password">
               Forgot password?
             </Link>
           </div>
-          <Button isLoading={isLoading as boolean} icon='arrow-right' type='submit' width='50%'>
+          <Button isLoading={isLoading as boolean} icon="arrow-right" type="submit" width="50%">
             Login
           </Button>
         </form>
         <GoogleButton />
-        <IconLink to='/signup' endIcon='arrow-right' className='color--gray'>
+        <IconLink to="/signup" endIcon="arrow-right" className="color--gray">
           Don't have an account?
         </IconLink>
       </Flex>
