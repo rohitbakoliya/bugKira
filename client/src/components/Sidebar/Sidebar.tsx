@@ -1,5 +1,5 @@
 import { Flex, IconLink } from '@bug-ui';
-import Avatar from '@bug-ui/Avatar';
+import { Avatar } from '@bug-ui';
 import AppLogo from 'components/Logo';
 import Navbar from 'components/Navbar/Navbar';
 import React, { useEffect, useState } from 'react';

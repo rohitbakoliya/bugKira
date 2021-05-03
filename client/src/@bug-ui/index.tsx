@@ -6,3 +6,4 @@ export * from './Toast';
 export * from './Loading';
 export * from './CircleIcon';
 export * from './Label';
+export * from './Avatar';

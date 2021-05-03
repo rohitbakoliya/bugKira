@@ -4,6 +4,33 @@ import { IUser, User } from '../models/User';
 import { validateBio, validateName, validateUsername } from '../validators/User.validators';
 
 /**
+ * @desc    all users
+ * @route   GET /api/user/:username
+ * @access  private
+ */
+export const getAllUsers = async (req: Request, res: Response) => {
+  const MAX_ITEMS = 10;
+  const page = req.query.page ? parseInt(req.query.page as string) - 1 : 0;
+
+  try {
+    const users = await User.find({}).select('-password -email').sort('date_joined');
+
+    if (!users) return res.status(httpStatus.NOT_FOUND).json({ error: 'No users found!' });
+
+    return res.status(httpStatus.OK).json({
+      totalDocs: users.length,
+      totalPages: Math.ceil(users.length / MAX_ITEMS),
+      data: users.slice(MAX_ITEMS * page, MAX_ITEMS * page + MAX_ITEMS),
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      error: 'Something went wrong while getting users',
+    });
+  }
+};
+
+/**
  * @desc    user info
  * @route   GET /api/user/:username
  * @access  private

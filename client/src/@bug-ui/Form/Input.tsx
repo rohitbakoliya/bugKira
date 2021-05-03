@@ -14,7 +14,7 @@ interface LabelProps {
   indicateError?: boolean;
 }
 
-const InputWrapper = styled.div`
+export const InputWrapper = styled.div`
   margin-bottom: 10px;
   width: 100%;
   .text--error {

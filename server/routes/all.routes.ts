@@ -9,11 +9,11 @@ import { passportJWT } from '../middlewares/passportJWT';
 
 const router = express.Router();
 
-// user auth routes
-router.use('/user/auth', authRoute);
-
 // user routes
 router.use('/user', userRoute, imageRoute);
+
+// user auth routes
+router.use('/user/auth', authRoute);
 
 // bugs routes
 router.use('/bugs', passportJWT, bugsRoute, commentsRoute);

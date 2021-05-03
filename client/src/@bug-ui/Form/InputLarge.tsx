@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import Input from './Input';
 
 const InputWrapper = styled.div`
-  width: 280px;
   display: flex;
   align-items: center;
   justify-content: center;

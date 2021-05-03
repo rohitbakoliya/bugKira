@@ -5,6 +5,7 @@ import { Loading } from './Loading';
 interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
   username?: string;
   size?: CSSProperties['width'];
+  showLoading?: boolean;
 }
 
 interface IAvatarImg {
@@ -34,7 +35,7 @@ const LoadingImage = styled.div<ILoading>`
   align-items: center;
 `;
 
-const Avatar: React.FC<Props> = ({ username, size, ...rest }) => {
+export const Avatar: React.FC<Props> = ({ username, size, showLoading = true, ...rest }) => {
   const [loading, setLoading] = useState(true);
 
   const handleLoading = () => {
@@ -42,17 +43,17 @@ const Avatar: React.FC<Props> = ({ username, size, ...rest }) => {
   };
   return (
     <>
-      <LoadingImage loader={loading} {...rest}>
-        <Loading varient="primary" />
-      </LoadingImage>
+      {showLoading && (
+        <LoadingImage loader={loading} {...rest}>
+          <Loading varient="primary" />
+        </LoadingImage>
+      )}
       <AvatarImage
         src={`/api/user/${username}/avatar/raw?size=${size}`}
         {...rest}
-        loader={loading}
+        loader={showLoading ? loading : false}
         onLoad={handleLoading}
       />
     </>
   );
 };
-
-export default Avatar;
