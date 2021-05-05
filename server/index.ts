@@ -15,6 +15,7 @@ import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import cookieParser from 'cookie-parser';
 import sgMail from '@sendgrid/mail';
+import { Server } from 'socket.io';
 import routes from './routes/all.routes';
 import errorHandler from './middlewares/errorHandler';
 import './config/db';
@@ -79,6 +80,18 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}/`);
+});
+
+const io = new Server(server);
+
+io.on('connection', (socket: any) => {
+  console.log('NEW CLIENT');
+  socket.on('send-notification', () => {
+    console.log('NEW NOTIFICATION');
+    socket.broadcast.emit('received-notification', {
+      message: 'New notifications',
+    });
+  });
 });

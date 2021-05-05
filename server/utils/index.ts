@@ -11,3 +11,11 @@ export const cookieExtractor = (req: Request) => {
   }
   return token;
 };
+
+export const NOTIFY_TYPES = {
+  COMMENTED: 'COMMENTED',
+  MENTIONED: 'MENTIONED',
+  REFERENCED: 'REFERENCED',
+  BUG_STATUS: 'BUG_STATUS',
+  NEW_BUG: 'NEW_BUG',
+};
