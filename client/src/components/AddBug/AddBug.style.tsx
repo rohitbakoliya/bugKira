@@ -8,7 +8,7 @@ const AddBugWrapper = styled.section`
     margin-bottom: 0;
   }
   label {
-    width: 40%;
+    width: 45%;
     margin: 10px 0;
     padding: 0;
     justify-content: flex-start;

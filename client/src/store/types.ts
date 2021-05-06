@@ -1,10 +1,12 @@
 import { RouterState } from 'connected-react-router';
 import { Reducer } from 'redux';
 import { AuthReducerState } from './ducks/auth';
+import { SinglebugReducerState } from './ducks/single-bug';
 
 export interface StoreState {
   bugs: any[];
   auth: AuthReducerState;
+  singlebug: SinglebugReducerState;
   router: Reducer<RouterState<unknown>>;
   loading: {
     [x: string]: boolean;

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface Props {
-  varient: 'primary' | 'secondary';
+  varient?: 'primary' | 'secondary';
 }
 
 const PrimaryLoaderWrapper = styled.div`
