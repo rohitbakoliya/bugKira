@@ -3,7 +3,9 @@ import { Request, Response } from 'express';
 import httpStatus from 'http-status-codes';
 import Joi from 'joi';
 import Bug from '../models/Bug';
+import Notification from '../models/Notification';
 import { IUser } from '../models/User';
+import { NOTIFY_TYPES } from '../utils';
 import { validateComment } from '../validators/Comment.validator';
 
 /**
@@ -55,6 +57,15 @@ export const createComment = async (req: Request, res: Response) => {
       author: authorDetails,
     });
     const newBug = await bug.save();
+
+    // send notifications
+    const notification = new Notification({
+      type: NOTIFY_TYPES.COMMENTED,
+      byUser: (req.user as IUser).id,
+      onBug: newBug._id,
+      notificationTo: [],
+    });
+    await notification.save();
 
     return res
       .status(httpStatus.CREATED)

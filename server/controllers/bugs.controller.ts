@@ -3,7 +3,9 @@ import { Request, Response } from 'express';
 import httpStatus from 'http-status-codes';
 import Joi from 'joi';
 import Bug, { TLabels } from '../models/Bug';
+import Notification from '../models/Notification';
 import { IUser } from '../models/User';
+import { NOTIFY_TYPES } from '../utils';
 import { validateBug, validateLabels } from '../validators/Bug.validators';
 
 /**
@@ -79,6 +81,16 @@ export const createBug = async (req: Request, res: Response) => {
     };
     const bug = new Bug({ ...value, author: authorDetails });
     const savedBug = await bug.save();
+
+    // send notifications
+    const notification = new Notification({
+      type: NOTIFY_TYPES.NEW_BUG,
+      byUser: (req.user as IUser).id,
+      onBug: savedBug._id,
+      notificationTo: [],
+    });
+    await notification.save();
+
     return res.status(httpStatus.CREATED).json({ data: savedBug });
   } catch (err) {
     console.log(err);
@@ -236,6 +248,16 @@ export const toggleBugStatus = ({ status }: { status: boolean }) => async (
     if (!bug) {
       return res.status(httpStatus.NOT_FOUND).json({ error: `Bug#${bugId} Not Found` });
     }
+
+    // send notifications
+    const notification = new Notification({
+      type: NOTIFY_TYPES.BUG_STATUS,
+      byUser: (req.user as IUser).id,
+      onBug: bug._id,
+      bug_status: status ? 'opened' : 'closed',
+      notificationTo: [],
+    });
+    await notification.save();
 
     return res.status(httpStatus.OK).json({ data: bug });
   } catch (err) {
