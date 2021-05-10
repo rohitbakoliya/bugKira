@@ -15,6 +15,7 @@ import VerticalLine from '@bug-ui/VerticalLine';
 import Comment from 'components/Comment/Comment';
 import SingleBugAside from './SingleBugAside';
 import CommentForm from './CommentForm';
+import Timeline from './Timeline';
 
 export const addCommentSchema = yup.object().shape({
   body: yup.string().min(6).max(1000).required(),
@@ -41,6 +42,17 @@ const SingleBug: React.FC = () => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bugId, query_comment_id]);
+
+  // get the concatenated timeline
+  let timeline: any = [];
+  if (bug?.result) {
+    let activities = bug.result.activities || [];
+    let references = bug.result.references || [];
+    timeline = [...activities, ...references].sort(
+      (a: any, b: any) => (new Date(a.date) as any) - (new Date(b.date) as any)
+    );
+  }
+
   return (
     <SingleBugWrapper>
       {bug?.result && (
@@ -63,7 +75,7 @@ const SingleBug: React.FC = () => {
                 commentId={''} // assumes it's not a comment
                 body={bug.result.body}
                 author={bug.result.author}
-                date={bug.result.date_opened}
+                date={bug.result.dateOpened}
                 reactions={bug.result.reactions}
               />
               {Object.values(bug.entities.comments || {}).map((comment: any) => (
@@ -78,6 +90,18 @@ const SingleBug: React.FC = () => {
                   isSelected={query_comment_id === comment.id}
                 />
               ))}
+              <section>
+                {timeline?.map((data: any, i: number) => (
+                  <Timeline
+                    key={i}
+                    action={data.action}
+                    author={data.author || data.by}
+                    from={data.from}
+                    date={data.date}
+                  />
+                ))}
+              </section>
+
               <CommentForm bugIsOpen={bug.result.isOpen} />
             </VerticalLine>
           </section>

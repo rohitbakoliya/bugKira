@@ -40,7 +40,8 @@ const CommentForm: React.FC<{ bugIsOpen: boolean }> = ({ bugIsOpen }) => {
     (state: string) => {
       dispatch(openOrCloseBug(bugId, state));
     },
-    [bugId, dispatch]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [bugId]
   );
 
   const [isCommentLoading, commentError] = useSelector((state: StoreState) => [

@@ -47,6 +47,7 @@ const StyledEditor = styled.div`
   }
   .react-tabs__tab--selected {
     border-bottom: 3px solid ${p => p.theme.colors.primary};
+    box-shadow: none;
   }
 
   @media screen and (${p => p.theme.media.tablet}) {

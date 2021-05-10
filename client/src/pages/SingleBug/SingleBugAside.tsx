@@ -36,7 +36,7 @@ const SingleBugAside: React.FC<SingleBugAsideProps> = ({ bugId, bug }) => {
 
   let participants: string[] = getParticipants(bug);
   labelEditError && toast.error(labelEditError as string);
-  console.log(bug);
+
   return (
     <aside className="singlebug__aside--sticky">
       <div>

@@ -84,7 +84,6 @@ const Comment: React.FC<CommentProps> = ({
 
     const references = getRefsOrMentions(markdown, '#');
     const mentions = getRefsOrMentions(markdown, '@');
-
     references.length && dispatch(addReferences(bugId, references));
     mentions.length && dispatch(mentionPeople(bugId, mentions));
   };

@@ -6,7 +6,7 @@ import Bug, { TLabels } from '../models/Bug';
 import Notification from '../models/Notification';
 import { IUser } from '../models/User';
 import { NOTIFY_TYPES } from '../utils';
-import { validateBug, validateLabels } from '../validators/Bug.validators';
+import { validateBug, validateLabels, validateReferences } from '../validators/Bug.validators';
 
 /**
  * @desc    get all bugs
@@ -219,6 +219,68 @@ export const updateLabels = async (req: Request, res: Response) => {
 };
 
 /**
+ * @desc    adds references to bug
+ * @route   PATCH /api/bugs/:bugId/references
+ * @access  private
+ */
+export const addReferences = async (req: Request, res: Response) => {
+  const { error, value } = validateReferences(req.body);
+  if (error) {
+    return res.status(httpStatus.UNPROCESSABLE_ENTITY).json({ error: error.details[0].message });
+  }
+
+  try {
+    const authorDetails = {
+      _id: (req.user as IUser).id,
+      username: (req.user as IUser).username,
+      name: (req.user as IUser).name,
+    };
+    const updated = await Bug.updateMany(
+      { bugId: { $in: value.references } },
+      {
+        $push: {
+          references: {
+            by: authorDetails,
+            from: req.params.bugId,
+          },
+        },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    if (!updated)
+      return res.status(httpStatus.NOT_FOUND).json({ error: `Bug#${req.params.bugId} Not Found` });
+
+    // get the _id for the param.bugId to use it in Notification ref
+    const bug = await Bug.findOne({ bugId: req.params.bugId });
+    // get all `_id`s for `notification.references`
+    const referencedIds = await Bug.find({
+      bugId: {
+        $in: [...value.references],
+      },
+    }).select('_id');
+    // send notifications
+    const notification = new Notification({
+      type: NOTIFY_TYPES.REFERENCED,
+      byUser: (req.user as IUser).id,
+      fromBug: bug?._id,
+      references: referencedIds.map(v => v._id),
+      notificationTo: [],
+    });
+    await notification.save();
+
+    return res.status(httpStatus.OK).json({ data: { modified: updated.nModified } });
+  } catch (err) {
+    console.log(err);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      error: 'Something went wrong while referencing bug',
+    });
+  }
+};
+
+/**
  * @desc    to close/open bug
  * @route   PATCH /api/bug/:bugId/[open|close]
  * @access  private
@@ -259,7 +321,7 @@ export const toggleBugStatus = ({ status }: { status: boolean }) => async (
     });
     await notification.save();
 
-    return res.status(httpStatus.OK).json({ data: bug });
+    return res.status(httpStatus.OK).json({ data: bug.activities });
   } catch (err) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: `something went wrong` });
   }
