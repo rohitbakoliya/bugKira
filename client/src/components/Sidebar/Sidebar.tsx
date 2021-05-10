@@ -55,6 +55,7 @@ const Sidebar: React.FC = React.memo(() => {
               size="130"
               height="130px"
               width="130px"
+              showLoading={true}
             />
             <div className="dashboard__info">
               <h2 className="text--bold">{user?.name}</h2>

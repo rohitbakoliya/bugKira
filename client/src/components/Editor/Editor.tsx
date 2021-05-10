@@ -33,13 +33,7 @@ const Editor: React.FC<EditorProps> = ({ markdown, inputRef, errors, handleMarkd
     <>
       <Tabs forceRenderTabPanel={true}>
         <Flex className="editor__header" align="center">
-          <Avatar
-            width="45px"
-            height="45px"
-            size={45}
-            username={user?.username}
-            showLoading={false}
-          />
+          <Avatar width="45px" height="45px" size={45} username={user?.username} />
           <TabList>
             <Tab>Write</Tab>
             <Tab>Preview</Tab>

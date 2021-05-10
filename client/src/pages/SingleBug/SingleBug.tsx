@@ -9,6 +9,13 @@ import SingleBugWrapper from './SingleBug.style';
 import { fetchBugWithId } from 'store/ducks';
 import { StoreState } from 'store';
 import useQuery from 'hooks/useQuery';
+import MetaInfo from './MetaInfo';
+import DashboardHeader from 'components/DashboardHeader';
+import VerticalLine from '@bug-ui/VerticalLine';
+import Comment from 'components/Comment/Comment';
+import SingleBugAside from './SingleBugAside';
+import CommentForm from './CommentForm';
+import Timeline from './Timeline';
 
 export const addCommentSchema = yup.object().shape({
   body: yup.string().min(6).max(1000).required(),
@@ -35,10 +42,74 @@ const SingleBug: React.FC = () => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bugId, query_comment_id]);
-  console.log(bug);
+
+  // get the concatenated timeline
+  let timeline: any = [];
+  if (bug?.result) {
+    let activities = bug.result.activities || [];
+    let references = bug.result.references || [];
+    timeline = [...activities, ...references].sort(
+      (a: any, b: any) => (new Date(a.date) as any) - (new Date(b.date) as any)
+    );
+  }
+
   return (
     <SingleBugWrapper>
-      <pre>{JSON.stringify(bug, undefined, 2)}</pre>
+      {bug?.result && (
+        <>
+          <section>
+            <DashboardHeader>
+              <h1>
+                {bug.result.title} <span className="color--gray">#{bugId}</span>
+              </h1>
+              <MetaInfo
+                isOpen={bug.result.isOpen}
+                date={bug.result.dateOpened}
+                author={bug.result.author}
+                commentsCount={bug.result?.comments?.length}
+              />
+            </DashboardHeader>
+            <VerticalLine>
+              <Comment
+                bugId={bugId}
+                commentId={''} // assumes it's not a comment
+                body={bug.result.body}
+                author={bug.result.author}
+                date={bug.result.dateOpened}
+                reactions={bug.result.reactions}
+              />
+              {Object.values(bug.entities.comments || {}).map((comment: any) => (
+                <Comment
+                  bugId={bugId}
+                  commentId={comment.id}
+                  key={comment.id}
+                  body={comment.body}
+                  author={comment.author}
+                  date={comment.date}
+                  reactions={comment.reactions}
+                  isSelected={query_comment_id === comment.id}
+                />
+              ))}
+              <section>
+                {timeline?.map((data: any, i: number) => (
+                  <Timeline
+                    key={i}
+                    action={data.action}
+                    author={data.author || data.by}
+                    from={data.from}
+                    date={data.date}
+                  />
+                ))}
+              </section>
+
+              <CommentForm bugIsOpen={bug.result.isOpen} />
+            </VerticalLine>
+          </section>
+          <section className="singlebug__aside">
+            <SingleBugAside bugId={bugId} bug={bug} />
+          </section>
+        </>
+      )}
     </SingleBugWrapper>
   );
 };

@@ -38,7 +38,7 @@ const OAuthSuccessPage = `
       window.onload = window.close();
         let originUrl = window.location.origin;
         if (window.location.hostname === 'localhost') {
-          originUrl = 'http://localhost:3000'
+          originUrl = 'http://localhost:4000'
         }
       window.opener.postMessage('success', originUrl);
     </script>

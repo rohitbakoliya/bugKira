@@ -3,6 +3,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled, { css } from 'styled-components/macro';
 import { VariantType } from '@bug-ui';
+import Flex from './Flex';
 
 interface StyledButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: VariantType;
@@ -79,3 +80,13 @@ export const Button: React.FC<Props> = ({
   </StyledButton>
 );
 export default Button;
+
+const ButtonGroupFloat: any = {
+  left: `margin-right: auto;`,
+  right: `margin-left: auto;`,
+};
+export const ButtonGroup = styled(Flex)<{ float?: string }>`
+  width: fit-content;
+
+  ${p => ButtonGroupFloat[p.float || 'right']}
+`;

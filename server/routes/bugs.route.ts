@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   addLabels,
   addOrRemoveReaction,
+  addReferences,
   createBug,
   deleteLabel,
   getAllBugs,
@@ -22,6 +23,8 @@ router.get('/suggestions', getSuggestions);
 
 router.get('/:bugId', getBugById);
 router.patch('/:bugId', updateBug);
+
+router.patch('/:bugId/references', addReferences);
 
 // bug labels
 router.patch('/:bugId/labels', updateLabels);

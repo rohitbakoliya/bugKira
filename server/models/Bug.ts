@@ -64,6 +64,16 @@ const BugSchema = new mongoose.Schema<IBug>({
   activities: [{ type: ActivitiesSchema }],
   comments: [{ type: CommentSchema }],
   reactions: [{ type: ReactionSchema }],
+  references: [
+    {
+      from: { type: Number, required: true },
+      by: { type: UserInfoSchema, required: true },
+      date: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
 });
 
 BugSchema.set('toJSON', {
