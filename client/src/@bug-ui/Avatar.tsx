@@ -35,7 +35,7 @@ const LoadingImage = styled.div<ILoading>`
   align-items: center;
 `;
 
-export const Avatar: React.FC<Props> = ({ username, size, showLoading = true, ...rest }) => {
+export const Avatar: React.FC<Props> = ({ username, size, showLoading = false, ...rest }) => {
   const [loading, setLoading] = useState(true);
 
   const handleLoading = () => {

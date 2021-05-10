@@ -210,7 +210,7 @@ export const updateLabels = async (req: Request, res: Response) => {
       return res.status(httpStatus.NOT_FOUND).json({ error: `Bug#${bugId} Not Found` });
     }
 
-    return res.status(httpStatus.OK).json({ data: bug });
+    return res.status(httpStatus.OK).json({ data: bug.labels });
   } catch (err) {
     return res
       .status(httpStatus.INTERNAL_SERVER_ERROR)

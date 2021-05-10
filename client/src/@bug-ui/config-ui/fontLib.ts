@@ -3,13 +3,17 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGoogle, faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import {
   faArrowRight,
+  faBan,
   faBars,
   faBell,
   faCheckCircle,
+  faCog,
   faEdit,
+  faEllipsisV,
   faEnvelope,
   faExclamation,
   faExclamationCircle,
+  faHistory,
   faHome,
   faInfoCircle,
   faKey,
@@ -17,7 +21,9 @@ import {
   faPaperPlane,
   faPlus,
   faSignOutAlt,
+  faSmile,
   faSpinner,
+  faTag,
   faTimes,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
@@ -44,5 +50,11 @@ library.add(
   faHome,
   faBell,
   faPlus,
-  faExclamation
+  faExclamation,
+  faBan,
+  faSmile,
+  faEllipsisV,
+  faCog,
+  faTag,
+  faHistory
 );

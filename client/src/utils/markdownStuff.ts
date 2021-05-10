@@ -26,3 +26,17 @@ export const htmlDecode = (input: string): string => {
  */
 export const renderMarkdown = (markdown: string): string =>
   htmlDecode(parseRefsAndMentions(markdown));
+
+/**
+ * @description Returns array of [@mentions] & [#references] from markdown
+ */
+export const getRefsOrMentions = (markdown: string, quantifier: string = '#'): string[] => {
+  let regex: RegExp = REFERENCE_REGEX;
+  if (quantifier === '@') regex = MENTION_REGEX;
+
+  let matched = markdown
+    .match(regex)
+    ?.map((ref: string): any => ref.replace(quantifier, '').trim())
+    ?.filter((value: number, index: number, arr: number[]) => arr.indexOf(value) === index);
+  return matched || [];
+};
